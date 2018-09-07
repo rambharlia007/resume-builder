@@ -13,18 +13,51 @@
 .App-title {
   font-size: 1.5em;
 }
-
+.fas {
+  color: #383d41d4;
+}
 .App-intro {
   font-size: large;
+}
+
+.min-h {
+  min-height: 200px;
 }
 
 .p15 {
   padding: 30px;
 }
-
+.p0 {
+  padding: 0px;
+}
+.pt10 {
+  margin-top: 10px;
+}
+.p20 {
+  padding: 20px;
+}
 .grey-bg {
   background-color: #eeee;
+  -webkit-print-color-adjust: exact;
 }
+
+.template-image {
+  padding: 20px;
+  text-align: center;
+}
+
+.pb10 {
+  padding-bottom: 10px;
+}
+
+.pt20 {
+  padding-top: 20px;
+}
+
+.hr_green {
+  border-top: 3px solid #3ec7b9;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -27,8 +27,15 @@ class App extends Component {
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.setTab = this.setTab.bind(this);
+    this.addCompany = this.addCompany.bind(this);
   }
 
+  addCompany = () => {
+    let org = {};
+    let orgs = this.state.workExperience;
+    orgs.push(org);
+    this.setState({ workExperience: orgs });
+  };
   handleInputChange(event) {
     const target = event.target;
     const value = target.type === "checkbox" ? target.checked : target.value;
@@ -123,81 +130,251 @@ class App extends Component {
                   <div class="card">
                     <div class="card-body">
                       <form>
-                        <div class="form-group">
-                          <label>Name</label>
-                          <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Job Title</label>
-                          <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Description</label>
-                          <input type="textarea" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Email</label>
-                          <input type="email" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Phone Number</label>
-                          <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>LinkedIn url</label>
-                          <input type="text" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                          <label>Skype Id</label>
-                          <input
-                            type="text"
-                            class="form-control"
-                            name="skypeId"
-                            value={this.state.skypeId}
-                            onChange={this.handleInputChange}
-                          />
-                        </div>
-                        <div class="form-group">
-                          <label>Languages</label>
-                          <select
-                            ref="s2_lang"
-                            multiple={true}
-                            class="form-control"
-                            value={this.state.languages}
-                            onChange={this.handleInputChange}
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
                           >
-                            <option value="English">English</option>
-                            <option value="Hindi">Hindi</option>
-                            <option value="Kannada">Kannada</option>
-                            <option value="Tamil">Tamil</option>
-                            <option value="Telugu">Telugu</option>
-                            <option value="Malayalam">Malayalam</option>
-                          </select>
+                            Name
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              type="email"
+                              class="form-control form-control-sm"
+                            />
+                          </div>
                         </div>
-                        <div class="form-group">
-                          <label>Skills</label>
-                          <select
-                            ref="s2_skills"
-                            multiple={true}
-                            class="form-control"
-                            value={this.state.skills}
-                            onChange={this.handleInputChange}
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
                           >
-                            <option value="Dotnet">Dotnet</option>
-                            <option value="c#">c#</option>
-                            <option value="Java">Java</option>
-                            <option value="Entity Framework">
-                              Entity Framework
-                            </option>
-                            <option value="Angular">Angular</option>
-                            <option value="React">React</option>
-                          </select>
+                            Job Title
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              type="email"
+                              class="form-control form-control-sm"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
+                          >
+                            Description
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              type="email"
+                              class="form-control form-control-sm"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
+                          >
+                            Description
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              type="email"
+                              class="form-control form-control-sm"
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Email
+                          </label>
+                          <div class="col-sm-9">
+                            <input class="form-control form-control-sm" />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Phone Number
+                          </label>
+                          <div class="col-sm-9">
+                            <input class="form-control form-control-sm" />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            LinkedIn url
+                          </label>
+                          <div class="col-sm-9">
+                            <input class="form-control form-control-sm" />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Skype Id
+                          </label>
+                          <div class="col-sm-9">
+                            <input class="form-control form-control-sm" />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Email
+                          </label>
+                          <div class="col-sm-9">
+                            <input class="form-control form-control-sm" />
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Languages
+                          </label>
+                          <div class="col-sm-9">
+                            <select
+                              class="form-control form-control-sm"
+                              ref="s2_lang"
+                              multiple={true}
+                              class="form-control"
+                              value={this.state.languages}
+                              onChange={this.handleInputChange}
+                            >
+                              <option value="English">English</option>
+                              <option value="Hindi">Hindi</option>
+                              <option value="Kannada">Kannada</option>
+                              <option value="Tamil">Tamil</option>
+                              <option value="Telugu">Telugu</option>
+                              <option value="Malayalam">Malayalam</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label className="col-sm-3 col-form-label col-form-label-sm">
+                            Skills
+                          </label>
+                          <div class="col-sm-9">
+                            <select
+                              class="form-control form-control-sm"
+                              ref="s2_skills"
+                              multiple={true}
+                              class="form-control"
+                              value={this.state.skills}
+                              onChange={this.handleInputChange}
+                            >
+                              <option value="Dotnet">Dotnet</option>
+                              <option value="c#">c#</option>
+                              <option value="Java">Java</option>
+                              <option value="Entity Framework">
+                                Entity Framework
+                              </option>
+                              <option value="Angular">Angular</option>
+                              <option value="React">React</option>
+                            </select>
+                          </div>{" "}
                         </div>
                       </form>
                     </div>
                   </div>
                 </div>
-                <div class="tab-pane" id="profile" role="tabpanel" />
+                <div class="tab-pane" id="profile" role="tabpanel">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm"
+                    onClick={this.addCompany}
+                  >
+                    Add Company
+                  </button>
+                  <div id="accordion">
+                    {this.state.workExperience.map((value, index) => {
+                      return (
+                        <div class="card" key={index}>
+                          <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                              <button
+                                class="btn btn-link"
+                                data-toggle="collapse"
+                                data-target="#collapseOne"
+                                aria-expanded="true"
+                                aria-controls="collapseOne"
+                              >
+                                Company 1
+                              </button>
+                            </h5>
+                          </div>
+
+                          <div
+                            id="collapseOne"
+                            class="collapse show"
+                            aria-labelledby="headingOne"
+                            data-parent="#accordion"
+                          >
+                            <div class="card-body">
+                              <form>
+                                <div class="form-group row">
+                                  <label
+                                    for="colFormLabelSm"
+                                    class="col-sm-3 col-form-label col-form-label-sm"
+                                  >
+                                    Company Name
+                                  </label>
+                                  <div class="col-sm-9">
+                                    <input
+                                      type="email"
+                                      class="form-control form-control-sm"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                  <label
+                                    for="colFormLabelSm"
+                                    class="col-sm-3 col-form-label col-form-label-sm"
+                                  >
+                                    Title
+                                  </label>
+                                  <div class="col-sm-9">
+                                    <input
+                                      type="email"
+                                      class="form-control form-control-sm"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                  <label
+                                    for="colFormLabelSm"
+                                    class="col-sm-3 col-form-label col-form-label-sm"
+                                  >
+                                    Location
+                                  </label>
+                                  <div class="col-sm-9">
+                                    <input
+                                      type="email"
+                                      class="form-control form-control-sm"
+                                    />
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                  <label
+                                    for="colFormLabelSm"
+                                    class="col-sm-3 col-form-label col-form-label-sm"
+                                  >
+                                    Date
+                                  </label>
+                                  <div class="col-sm-9">
+                                    <input
+                                      type="email"
+                                      class="form-control form-control-sm"
+                                    />
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
                 <div class="tab-pane" id="messages" role="tabpanel">
                   ...
                 </div>

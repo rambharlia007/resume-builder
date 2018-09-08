@@ -46,8 +46,38 @@
   text-align: center;
 }
 
+.profile-text {
+  color: #fffffff5;
+}
+
+.profile {
+  width: 100%;
+  background-color: #3ec7b9;
+  min-height: 150px;
+  color: #fffffff5;
+  -webkit-print-color-adjust: exact;
+}
+
+.float-right {
+  float: right;
+}
+
+.hr-1 {
+  border-top: 3px solid #3ec7b9;
+}
+.hr-2 {
+  border-top: 2px solid rgba(255, 255, 255, 0.5);
+}
 .pb10 {
   padding-bottom: 10px;
+}
+
+.fs13 {
+  font-size: 1.3em;
+}
+
+.pb20 {
+  padding-bottom: 20px;
 }
 
 .pt20 {

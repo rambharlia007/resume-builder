@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabContentWidth: 4,
+      tabContentWidth: 6,
       name: "",
       title: "",
       description: "",
@@ -129,10 +129,12 @@ class App extends Component {
   }
 
   setTab = value => {
-    if (value == "basicInfo") this.setState({ tabContentWidth: 4 });
-    else if (value === "projects") this.setState({ tabContentWidth: 8 });
-    else if (value === "organisations") this.setState({ tabContentWidth: 8 });
-    else if (value === "preview") this.setState({ tabContentWidth: 5 });
+    if (value == "basicInfo") this.setState({ tabContentWidth: 6 });
+    else if (value === "projects") this.setState({ tabContentWidth: 9 });
+    else if (value === "organisations") this.setState({ tabContentWidth: 9 });
+    else if (value === "preview") this.setState({ tabContentWidth: 7 });
+    else if (value === "template_preview")
+      this.setState({ tabContentWidth: 9 });
     $(this.refs[value]).tab("show");
   };
   componentDidMount() {
@@ -160,7 +162,7 @@ class App extends Component {
       <div className="App">
         <div className="container-fluid p15 grey-bg">
           <div className="row">
-            <div className="col-md-2">
+            <div className="col-md-3">
               <div class="list-group" id="myList" role="tablist">
                 <a
                   class="list-group-item list-group-item-action active"
@@ -886,11 +888,8 @@ class App extends Component {
                 <div class="tab-pane" id="template_preview" role="tabpanel">
                   <div class="col-md-10">
                     <div class="row">
-                      <div
-                        class="col-md-4"
-                        style="background-color:#eeee; -webkit-print-color-adjust:exact;"
-                      >
-                        <div style="padding:20px; text-align:center">
+                      <div class="col-md-4 grey-bg">
+                        <div className="template-image">
                           <img
                             src="C:\Users\rambh\Downloads\Webp.net-resizeimage.jpg"
                             width="150"
@@ -899,47 +898,41 @@ class App extends Component {
                             class="rounded-circle"
                           />
                         </div>
-                        <div style="padding-bottom: 10px;">
+                        <div className="pb10">
                           <p class="font-weight-normal no-m-bottom">
                             <i class="fas fa-envelope def-text-color" />{" "}
                             rambharlia007@gmail.com
                           </p>
                         </div>
-                        <div style="padding-bottom: 10px;">
+                        <div className="pb10">
                           <p class="font-weight-normal no-m-bottom">
                             <i class="fas fa-mobile def-text-color" />{" "}
                             8792092047
                           </p>
                         </div>
-                        <div style="padding-bottom: 10px;">
+                        <div className="pb10">
                           <p class="font-weight-normal no-m-bottom">
                             <i class="fas fa-map-marker-alt def-text-color" />{" "}
                             Bangalore, India
                           </p>
                         </div>
-                        <div style="padding-bottom: 10px;">
+                        <div className="pb10">
                           <p class="font-weight-normal no-m-bottom">
                             <i class="fab fa-linkedin def-text-color" />{" "}
                             linked.in/rambharlia
                           </p>
                         </div>
-                        <div style="padding-bottom: 10px;">
+                        <div className="pb10">
                           <p class="font-weight-normal no-m-bottom">
                             <i class="fab fa-skype def-text-color" />{" "}
                             ram.bharlia
                           </p>
                         </div>
                         <div>
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                          <h3 class="def-text-color text-uppercase pt20">
                             Skills
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
+                          <hr class="no-m-top hr-1" />
                           <span class="border rounded skill-padding">
                             Entity Framework
                           </span>
@@ -970,16 +963,10 @@ class App extends Component {
                           <br />
                         </div>
                         <div>
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                          <h3 class="def-text-color text-uppercase pt20">
                             Languages
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
+                          <hr class="no-m-top hr-1" />
                           <span class="border rounded skill-padding">
                             Hindi
                           </span>
@@ -995,25 +982,14 @@ class App extends Component {
                         </div>
                       </div>
                       <div class="col-md-8">
-                        <div
-                          class="card"
-                          style="width: 100%; background-color: #3ec7b9;min-height: 150px; color: #fffffff5; -webkit-print-color-adjust:exact;"
-                        >
+                        <div class="card profile">
                           <div class="card-body">
-                            <h3 class="card-title" style="color: #fffffff5;">
-                              Ram Bharlia
-                            </h3>
-                            <p
-                              class="card-subtitle mb-2 text-muted"
-                              style="color: #fffffff5 !important; font-size: 1.3em;"
-                            >
+                            <h3 class="card-title profile-text">Ram Bharlia</h3>
+                            <p class="card-subtitle mb-2 text-muted profile-text fs13">
                               Full stack dotnet/NodeJs Developer
                             </p>
-                            <hr
-                              class="no-m-top"
-                              style="border-top: 2px solid rgba(255,255,255,.5);"
-                            />
-                            <p class="card-text" style="color: #fffffff5;">
+                            <hr class="no-m-top hr-2" />
+                            <p class="card-text profile-text">
                               Since Bootstrap is developed to be mobile first,
                               we use a handful of media queries to create
                               sensible breakpoints for our layouts and
@@ -1027,23 +1003,19 @@ class App extends Component {
                           </div>
                         </div>
                         <div>
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                          <h3 class="def-text-color text-uppercase pt20">
                             Work Experience
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
+                          <hr class="no-m-top hr-1" />
                           <h4 class="def-text-color no-m-bottom">
                             Business Development Manager
                           </h4>
                           <h4 class="no-m-bottom">AirState Solutions</h4>
                           <p class="font-italic def-text-color no-m-bottom">
                             09/2014 - 06/2017
-                            <span style="float: right;">Bangalore, India</span>
+                            <span className="float-right">
+                              Bangalore, India
+                            </span>
                           </p>
                           <p class="font-weight-normal no-m-bottom">
                             <span class="def-text-color"> &#x25A0;</span> Since
@@ -1071,14 +1043,14 @@ class App extends Component {
                           </p>
                         </div>
 
-                        <div style="padding-top: 20px;">
+                        <div className="pt20">
                           <h4 class="def-text-color no-m-bottom">
                             Business Development Assistant
                           </h4>
                           <h4 class="no-m-bottom">AirState Solutions</h4>
                           <p class="font-italic def-text-color no-m-bottom">
                             09/2014 - 06/2017
-                            <span style="float: right;">Mysore, India</span>
+                            <span className="float-right">Mysore, India</span>
                           </p>
                           <p class="font-weight-normal no-m-bottom">
                             <span class="def-text-color"> &#x25A0;</span> Since
@@ -1107,16 +1079,10 @@ class App extends Component {
                         </div>
 
                         <div>
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                          <h3 class="def-text-color text-uppercase pt20">
                             Organisations
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
+                          <hr class="no-m-top hr-1" />
                           <p class="font-weight-normal">DeltaX (2015-2018)</p>
                           <p class="font-weight-normal">DevOn (2018-2019)</p>
                           <p class="font-weight-normal">
@@ -1124,27 +1090,21 @@ class App extends Component {
                           </p>
                         </div>
 
-                        <div style="padding-bottom:20px;">
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                        <div className="pb20">
+                          <h3 class="def-text-color text-uppercase pt20">
                             Education
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
-                          <div style="padding-bottom:20px;">
+                          <hr class="no-m-top hr-1" />
+                          <div className="pb20">
                             <h4 class="def-text-color no-m-bottom">PCME</h4>
                             <h5 class="no-m-bottom">
                               ST. Joseph's pre university
                             </h5>
                             <p class="font-italic def-text-color no-m-bottom">
-                              09/2014 - 06/2017{" "}
+                              09/2014 - 06/2017
                             </p>
                           </div>
-                          <div style="padding-bottom:20px;">
+                          <div className="pb20">
                             <h4 class="def-text-color no-m-bottom">
                               BE in computer science
                             </h4>
@@ -1157,17 +1117,11 @@ class App extends Component {
                           </div>
                         </div>
 
-                        <div style="padding-bottom:20px;">
-                          <h3
-                            class="def-text-color text-uppercase"
-                            style="padding-top: 20px;"
-                          >
+                        <div className="pb20">
+                          <h3 class="def-text-color text-uppercase pt20">
                             Honours and awards
                           </h3>
-                          <hr
-                            class="no-m-top"
-                            style="border-top: 3px solid #3ec7b9;"
-                          />
+                          <hr class="no-m-top hr-1" />
                           <h5 class="no-m-bottom">
                             Hacker rank challenge, coder of the month
                           </h5>

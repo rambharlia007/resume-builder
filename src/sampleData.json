@@ -1,0 +1,72 @@
+{
+  "tabContentWidth": 6,
+  "name": "Ram Bharlia ",
+  "title": "Full stack dotnet/NodeJs Developer",
+  "description": "Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces. These breakpoints are mostly based on minimum viewport widths and allow us to scale up elements as the viewport changes. Bootstrap primarily uses the following media query ranges—or breakpoints—in our source Sass files for our layout, grid system, and components.",
+  "email": "ram@gmail.com",
+  "phoneNumber": "8792092047",
+  "linkedIn": "linked.in/rambharlia",
+  "location": "Bangalore, India",
+  "skypeId": "ram.bharlia",
+  "skills": [
+    "Dotnet",
+    "c#",
+    "Java",
+    "Entity Framework",
+    "Angular",
+    "React",
+    "spring"
+  ],
+  "languages": ["English", "Hindi", "Kannada", "Tamil", "Telugu", "Malayalam"],
+  "workExperience": [
+    {
+      "name": "DeltaX",
+      "position": "Business Development Manager",
+      "location": "Bangalore, India",
+      "date": "june 2015 to march 2017",
+      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
+    },
+    {
+      "name": "Dev on",
+      "position": "Business Development Manager ||",
+      "location": "Mangalore, India",
+      "date": "june 2015 to march 2017",
+      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
+    }
+  ],
+  "organisations": [
+    { "name": "DeltaX (march 2017 to apr 2019)" },
+    { "name": "TCS (march 2017 to apr 2019)" },
+    { "name": "Infosys (march 2017 to apr 2019)" },
+    { "name": "Wipro (march 2017 to apr 2019)" },
+    { "name": "DevOn (march 2017 to apr 2019)" }
+  ],
+  "education": [
+    {
+      "collegeName": "SJ PUC",
+      "Course": "",
+      "timePeriod": "2008-2011",
+      "course": "PCME"
+    },
+    {
+      "collegeName": "UVCE",
+      "Course": "",
+      "timePeriod": "2011-2015",
+      "course": "BTech in Info scinece"
+    }
+  ],
+  "honoursAndAwards": [
+    { "challengeName": "hacker rank c-1", "title": "june coder" },
+    { "challengeName": "marathon", "title": "silver medalist" },
+    { "challengeName": "NCC", "title": "natianal camp, bijapur" }
+  ],
+  "[object Object]": {
+    "0": {
+      "name": "DeltaX",
+      "position": "Business Development Manager",
+      "location": "Bangalore, India",
+      "date": "june 2015 to march 2017",
+      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
+    }
+  }
+}

@@ -25,7 +25,7 @@
 }
 
 .p15 {
-  padding: 30px;
+  padding: 15px;
 }
 .p0 {
   padding: 0px;
@@ -41,18 +41,23 @@
   -webkit-print-color-adjust: exact;
 }
 
+.white-bg {
+  background-color: white;
+  -webkit-print-color-adjust: exact;
+}
+
 .template-image {
   padding: 20px;
   text-align: center;
 }
 
 .profile-text {
-  color: #fffffff5;
+  color: #fffffff5 !important;
 }
 
 .profile {
   width: 100%;
-  background-color: #3ec7b9;
+  background-color: #3ec7b9 !important;
   min-height: 150px;
   color: #fffffff5;
   -webkit-print-color-adjust: exact;
@@ -73,7 +78,7 @@
 }
 
 .fs13 {
-  font-size: 1.3em;
+  font-size: 1.3em !important;
 }
 
 .pb20 {
@@ -86,6 +91,73 @@
 
 .hr_green {
   border-top: 3px solid #3ec7b9;
+}
+
+.skill-padding {
+  background-color: #3ec7b9;
+  padding: 5px 10px 5px 10px;
+  display: inline-block;
+  -webkit-print-color-adjust: exact;
+}
+
+.def-text-color {
+  color: #3ec7b9 !important;
+}
+
+.no-m-top {
+  margin-top: 0px !important;
+}
+
+.no-m-bottom {
+  margin-bottom: 0px !important;
+}
+
+.p-text {
+  font-family: monospace;
+}
+
+.font-weight-normal {
+  font-weight: 450 !important;
+}
+
+body {
+  font-size: 0.9rem !important;
+}
+
+h3 {
+  font-size: 1.5rem !important;
+}
+
+h4 {
+  font-size: 1.25rem !important;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.list-group-item.active {
+  background-color: rgba(108, 117, 125, 0.5) !important;
+  border-color: rgba(108, 117, 125, 0.5) !important;
+}
+body {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.container-fluid,
+.row-fluid {
+  height: inherit;
+}
+@media print {
+  .nonPrintable {
+    display: none;
+  }
+  @page {
+    size: auto;
+    margin: 0mm;
+  }
 }
 
 @keyframes App-logo-spin {

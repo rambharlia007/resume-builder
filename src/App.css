@@ -103,6 +103,9 @@
 .def-text-color {
   color: #3ec7b9 !important;
 }
+.italic {
+  font-style: italic;
+}
 
 .no-m-top {
   margin-top: 0px !important;

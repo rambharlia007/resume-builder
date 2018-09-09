@@ -215,10 +215,10 @@ class App extends Component {
       var data = $(this.refs.s2_skills).val();
       this.setState({ skills: data });
     });
-    $(".disableEvent").on("contextmenu", function() {
-      alert("right click disabled");
-      return false;
-    });
+    // $(".disableEvent").on("contextmenu", function() {
+    //   alert("right click disabled");
+    //   return true;
+    // });
     $('[data-toggle="tooltip"]').tooltip();
   }
 
@@ -256,15 +256,6 @@ class App extends Component {
           >
             <span class="navbar-toggler-icon" />
           </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">
-                  Home <span class="sr-only">(current)</span>
-                </a>
-              </li>
-            </ul>
-          </div>
         </nav>
         <div className={"container-fluid p15 " + this.state.mainBackGround}>
           <div className="row pb10">
@@ -470,7 +461,48 @@ class App extends Component {
           {!this.state.isPreviewMode && (
             <div className="row nonPrintable">
               <div className="col-md-3">
-                <div class="list-group" id="myList" role="tablist">
+                <div className="row">
+                  <div className="col-md-12">
+                    {" "}
+                    <button
+                      class="btn btn-secondary btn-sm mr10"
+                      type="submit"
+                      onClick={() => {
+                        this.loadSampleData();
+                      }}
+                    >
+                      Load sample resume data
+                    </button>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12 pt10">
+                    <button
+                      class="btn btn-secondary btn-sm mr10"
+                      type="submit"
+                      onClick={() => {
+                        this.clearSampleData();
+                      }}
+                    >
+                      Clear resume data
+                    </button>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-12 pt10">
+                    <button
+                      class="btn btn-secondary btn-sm mr10"
+                      type="submit"
+                      onClick={() => {
+                        this.setState({ isPreviewMode: true });
+                        this.setState({ mainBackGround: "white-bg" });
+                      }}
+                    >
+                      Resume preview
+                    </button>{" "}
+                  </div>
+                </div>
+                <div class="list-group pt10" id="myList" role="tablist">
                   <a
                     class="list-group-item list-group-item-action active"
                     ref="basicInfo"
@@ -517,45 +549,20 @@ class App extends Component {
                   </a>
                 </div>
 
-                <div className="row">
-                  <div className="col-md-12 pt10">
-                    {" "}
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.loadSampleData();
-                      }}
-                    >
-                      Load sample resume data
-                    </button>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 pt10">
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.clearSampleData();
-                      }}
-                    >
-                      Clear resume data
-                    </button>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 pt10">
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.setState({ isPreviewMode: true });
-                        this.setState({ mainBackGround: "white-bg" });
-                      }}
-                    >
-                      Resume preview
-                    </button>{" "}
+                <div class="card pt10">
+                  <div class="card-body">
+                    <h5 class="card-title def-text-color">
+                      Wanna Buy Me A Coffee?
+                    </h5>
+                    <p class="card-text italic">
+                      If you like the free resume builder web app and would like
+                      to donate, then you can pay via PayTm | Google pay| Phone
+                      Pay to 8792092047. <br />
+                      Paypal link paypal.me/RamBharlia
+                      <br /> <br />
+                      Please feel free to write for any suggestion at
+                      rambharlia007@gmail.com
+                    </p>
                   </div>
                 </div>
               </div>

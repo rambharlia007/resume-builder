@@ -1,13 +1,13 @@
 {
   "tabContentWidth": 6,
-  "name": "Ram Bharlia ",
+  "name": "Sidharth",
   "title": "Full stack dotnet/NodeJs Developer",
-  "description": "Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces. These breakpoints are mostly based on minimum viewport widths and allow us to scale up elements as the viewport changes. Bootstrap primarily uses the following media query ranges—or breakpoints—in our source Sass files for our layout, grid system, and components.",
-  "email": "ram@gmail.com",
-  "phoneNumber": "8792092047",
-  "linkedIn": "linked.in/rambharlia",
+  "description": "Interested to pursue an acting career, he successfully auditioned for a film to be directed by Anubhav Sinha. However, the film was shelved, following which he worked as an assistant director to Karan Johar on the 2010 film My Name Is Khan.[5][7] In 2012, Malhotra made his acting debut with Johar's Student of the Year alongside Varun Dhawan and Alia Bhatt.",
+  "email": "sid@gmail.com",
+  "phoneNumber": "999988889",
+  "linkedIn": "linked.in/sid",
   "location": "Bangalore, India",
-  "skypeId": "ram.bharlia",
+  "skypeId": "sid.007",
   "skills": [
     "Dotnet",
     "c#",
@@ -20,26 +20,26 @@
   "languages": ["English", "Hindi", "Kannada", "Tamil", "Telugu", "Malayalam"],
   "workExperience": [
     {
-      "name": "DeltaX",
+      "name": "Micorsoft",
       "position": "Business Development Manager",
       "location": "Bangalore, India",
-      "date": "june 2015 to march 2017",
-      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
+      "date": "june 2015 to march 2016",
+      "description": "* Worked  on  ad  creation  flow  to  support  creating  of  facebook  ads * Build  Budget  center  feature  to  link  campaigns  to  support  budget  optimisation* Build  Budget  center  allocation  grid  using  knockout  js  to  support  to  show  budget  suggestions * Suppor  to  show  graphs  for  KPI  using  dxchartBuild  services  using  BDD  appraoch  to  pull  data  from  external  sources * Build  services  to  pull  data  for  audience  network  from  Facebook. * Lead  form  integration  to  pull  leads  from  facebook  and  to  push  to  client  CRM"
     },
     {
-      "name": "Dev on",
+      "name": "Amazon",
       "position": "Business Development Manager ||",
       "location": "Mangalore, India",
-      "date": "june 2015 to march 2017",
-      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
+      "date": "march 2016 to present",
+      "description": "* Worked  on  ad  creation  flow  to  support  creating  of  facebook  ads * Build  Budget  center  feature  to  link  campaigns  to  support  budget  optimisation* Build  Budget  center  allocation  grid  using  knockout  js  to  support  to  show  budget  suggestions * Suppor  to  show  graphs  for  KPI  using  dxchartBuild  services  using  BDD  appraoch  to  pull  data  from  external  sources * Build  services  to  pull  data  for  audience  network  from  Facebook. * Lead  form  integration  to  pull  leads  from  facebook  and  to  push  to  client  CRM"
     }
   ],
   "organisations": [
-    { "name": "DeltaX (march 2017 to apr 2019)" },
-    { "name": "TCS (march 2017 to apr 2019)" },
-    { "name": "Infosys (march 2017 to apr 2019)" },
-    { "name": "Wipro (march 2017 to apr 2019)" },
-    { "name": "DevOn (march 2017 to apr 2019)" }
+    { "name": "Accenture (march 2017 to present)" },
+    { "name": "TCS (march 2016 to apr 2017)" },
+    { "name": "Infosys (march 2015 to apr 2016)" },
+    { "name": "Wipro (march 2014 to apr 2015)" },
+    { "name": "Amazon (march 2013 to apr 2014)" }
   ],
   "education": [
     {
@@ -59,14 +59,5 @@
     { "challengeName": "hacker rank c-1", "title": "june coder" },
     { "challengeName": "marathon", "title": "silver medalist" },
     { "challengeName": "NCC", "title": "natianal camp, bijapur" }
-  ],
-  "[object Object]": {
-    "0": {
-      "name": "DeltaX",
-      "position": "Business Development Manager",
-      "location": "Bangalore, India",
-      "date": "june 2015 to march 2017",
-      "description": "* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\nSince Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces\n* Since Bootstrap is developed to be mobile first, we use a handful of media queries to create sensible breakpoints for our layouts and interfaces"
-    }
-  }
+  ]
 }

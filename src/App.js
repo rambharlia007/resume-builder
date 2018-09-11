@@ -9,7 +9,7 @@ import "../node_modules/font-awesome/css/font-awesome.css";
 
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/select2/dist/css/select2.min.css";
-
+import _ from "lodash";
 const jsonData = require("./sampleData.json");
 
 const props = [
@@ -32,7 +32,14 @@ const props = [
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    this.state = this.getState();
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.addCompany = this.addCompany.bind(this);
+  }
+
+  getState() {
+    return {
+      isRandomDataPreview: false,
       mainBackGround: "grey-bg",
       isPreviewMode: false,
       tabContentWidth: 6,
@@ -49,7 +56,7 @@ class App extends Component {
       languages: [],
       workExperience: [
         {
-          name: "company-1",
+          name: "",
           position: "",
           location: "",
           date: "",
@@ -75,29 +82,27 @@ class App extends Component {
         }
       ]
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.setTab = this.setTab.bind(this);
-    this.addCompany = this.addCompany.bind(this);
   }
 
   handleUploadImage = () => {};
   clearSampleData = () => {
-    props.forEach((data, index) => {
-      this.setState({ [data]: "" });
-    });
+    this.setState(this.getState());
   };
   loadSampleData = () => {
-    $(this.refs.s2_lang)
-      .select2()
-      .val(jsonData.languages)
-      .trigger("change");
-    $(this.refs.s2_skills)
-      .select2()
-      .val(jsonData.skills)
-      .trigger("change");
+    // $(this.refs.s2_lang)
+    //   .select2()
+    //   .val(jsonData.languages)
+    //   .trigger("change");
+    // $(this.refs.s2_skills)
+    //   .select2()
+    //   .val(jsonData.skills)
+    //   .trigger("change");
     props.forEach((data, index) => {
       this.setState({ [data]: jsonData[data] });
     });
+
+    this.setState({ isPreviewMode: true });
+    this.setState({ mainBackGround: "white-bg" });
   };
 
   addCompany = () => {
@@ -169,7 +174,8 @@ class App extends Component {
     });
   }
 
-  setTab = value => {
+  setTab = (e, value) => {
+    e.preventDefault();
     if (value == "basicInfo") this.setState({ tabContentWidth: 6 });
     else if (value === "projects") this.setState({ tabContentWidth: 9 });
     else if (value === "organisations") this.setState({ tabContentWidth: 9 });
@@ -268,7 +274,10 @@ class App extends Component {
                     onClick={() => {
                       this.setState({ isPreviewMode: false });
                       this.setState({ mainBackGround: "grey-bg" });
-                      this.setSelect2Component();
+                      if (this.state.isRandomDataPreview) {
+                        this.setState({ isRandomDataPreview: true });
+                        this.clearSampleData();
+                      }
                     }}
                   >
                     Edit details
@@ -299,160 +308,196 @@ class App extends Component {
                       class="rounded-circle"
                     />
                   </div>
-                  <div className="pb10">
-                    <p class="font-weight-normal no-m-bottom">
-                      <i class="fas fa-envelope def-text-color" />
-                      &nbsp; {this.state.email}
-                    </p>
-                  </div>
-                  <div className="pb10">
-                    <p class="font-weight-normal no-m-bottom">
-                      <i class="fas fa-mobile def-text-color" />
-                      &nbsp;
-                      {this.state.phoneNumber}
-                    </p>
-                  </div>
-                  <div className="pb10">
-                    <p class="font-weight-normal no-m-bottom">
-                      <i class="fas fa-map-marker-alt def-text-color" />
-                      &nbsp; {this.state.location}
-                    </p>
-                  </div>
-                  <div className="pb10">
-                    <p class="font-weight-normal no-m-bottom">
-                      <i class="fab fa-linkedin def-text-color" />
-                      &nbsp; {this.state.linkedIn}
-                    </p>
-                  </div>
-                  <div className="pb10">
-                    <p class="font-weight-normal no-m-bottom">
-                      <i class="fab fa-skype def-text-color" /> &nbsp;
-                      {this.state.skypeId}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 class="def-text-color text-uppercase pt20">Skills</h3>
-                    <hr class="no-m-top hr-1" />
-                    {this.state.skills.map((value, index) => {
-                      return (
-                        <React.Fragment>
-                          <span class="border rounded skill-padding">
-                            {value}
-                          </span>{" "}
-                          <br />
-                        </React.Fragment>
-                      );
-                    })}
-                  </div>
-                  <div>
-                    <h3 class="def-text-color text-uppercase pt20">
-                      Languages
-                    </h3>
-                    <hr class="no-m-top hr-1" />
-                    {this.state.languages.map((value, index) => {
-                      return (
-                        <React.Fragment>
-                          <span class="border rounded skill-padding">
-                            {value}
-                          </span>{" "}
-                          <br />
-                        </React.Fragment>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div class="col-md-9">
-                  <div class="card profile">
-                    <div class="card-body">
-                      <h3 class="card-title profile-text">{this.state.name}</h3>
-                      <p class="card-subtitle mb-2 profile-text fs13">
-                        {this.state.title}
-                      </p>
-                      <hr class="no-m-top hr-2" />
-                      <p class="card-text profile-text">
-                        {this.state.description}
+                  {this.state.email && (
+                    <div className="pb10">
+                      <p class="font-weight-normal no-m-bottom">
+                        <i class="fas fa-envelope def-text-color" />
+                        &nbsp; {this.state.email}
                       </p>
                     </div>
-                  </div>
-                  <div>
-                    <h3 class="def-text-color text-uppercase pt20">
-                      Work Experience
-                    </h3>
-                    <hr class="no-m-top hr-1" />
-
-                    {this.state.workExperience.map((data, index) => {
-                      return (
-                        <div className="pb20">
-                          <h4 class="def-text-color no-m-bottom">
-                            {data.name}
-                          </h4>
-                          <h4 class="no-m-bottom">{data.position}</h4>
-                          <p class="font-italic def-text-color no-m-bottom">
-                            {data.date}
-                            <span className="float-right">{data.location}</span>
+                  )}
+                  {this.state.phoneNumber && (
+                    <div className="pb10">
+                      <p class="font-weight-normal no-m-bottom">
+                        <i class="fas fa-mobile def-text-color" />
+                        &nbsp;
+                        {this.state.phoneNumber}
+                      </p>
+                    </div>
+                  )}
+                  {this.state.location && (
+                    <div className="pb10">
+                      <p class="font-weight-normal no-m-bottom">
+                        <i class="fas fa-map-marker-alt def-text-color" />
+                        &nbsp; {this.state.location}
+                      </p>
+                    </div>
+                  )}
+                  {this.state.linkedIn && (
+                    <div className="pb10">
+                      <p class="font-weight-normal no-m-bottom">
+                        <i class="fab fa-linkedin def-text-color" />
+                        &nbsp; {this.state.linkedIn}
+                      </p>
+                    </div>
+                  )}
+                  {this.state.skypeId && (
+                    <div className="pb10">
+                      <p class="font-weight-normal no-m-bottom">
+                        <i class="fab fa-skype def-text-color" /> &nbsp;
+                        {this.state.skypeId}
+                      </p>
+                    </div>
+                  )}
+                  {!_.isEmpty(this.state.skills) && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase pt20">Skills</h3>
+                      <hr class="no-m-top hr-1" />
+                      {this.state.skills.map((value, index) => {
+                        return (
+                          <React.Fragment>
+                            <span class="border rounded skill-padding">
+                              {value}
+                            </span>{" "}
+                            <br />
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {!_.isEmpty(this.state.languages) && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase pt20">
+                        Languages
+                      </h3>
+                      <hr class="no-m-top hr-1" />
+                      {this.state.languages.map((value, index) => {
+                        return (
+                          <React.Fragment>
+                            <span class="border rounded skill-padding">
+                              {value}
+                            </span>{" "}
+                            <br />
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div class="col-md-9">
+                  {this.state.name && (
+                    <div class="card profile">
+                      <div class="card-body">
+                        <h3 class="card-title profile-text">
+                          {this.state.name}
+                        </h3>
+                        {this.state.title && (
+                          <p class="card-subtitle mb-2 profile-text fs13">
+                            {this.state.title}
                           </p>
+                        )}
+                        {this.state.description && (
+                          <React.Fragment>
+                            <hr class="no-m-top hr-2" />
+                            <p class="card-text profile-text">
+                              {this.state.description}
+                            </p>{" "}
+                          </React.Fragment>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {this.state.workExperience[0].name && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase pt20">
+                        Work Experience
+                      </h3>
+                      <hr class="no-m-top hr-1" />
 
-                          {data.description
-                            .split("*")
-                            .map((inData, inIndex) => {
-                              if (inData) {
-                                return (
-                                  <p class="font-weight-normal no-m-bottom">
-                                    <span class="def-text-color">
-                                      {" "}
-                                      &#x25A0;
-                                    </span>{" "}
-                                    {inData.trim()}
-                                  </p>
-                                );
-                              }
-                            })}
-                        </div>
-                      );
-                    })}
-                  </div>
+                      {this.state.workExperience.map((data, index) => {
+                        return (
+                          <div className="pb20">
+                            <h4 class="def-text-color no-m-bottom">
+                              {data.name}
+                            </h4>
+                            <h4 class="no-m-bottom">{data.position}</h4>
+                            <p class="font-italic def-text-color no-m-bottom">
+                              {data.date}
+                              <span className="float-right">
+                                {data.location}
+                              </span>
+                            </p>
 
-                  <div>
-                    <h3 class="def-text-color text-uppercase">Organisations</h3>
-                    <hr class="no-m-top hr-1" />
-                    {this.state.organisations.map((data, index) => {
-                      return <p class="font-weight-normal">{data.name}</p>;
-                    })}
-                  </div>
+                            {data.description
+                              .split("*")
+                              .map((inData, inIndex) => {
+                                if (inData) {
+                                  return (
+                                    <p class="font-weight-normal no-m-bottom">
+                                      <span class="def-text-color">
+                                        {" "}
+                                        &#x25A0;
+                                      </span>{" "}
+                                      {inData.trim()}
+                                    </p>
+                                  );
+                                }
+                              })}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
 
-                  <div>
-                    <h3 class="def-text-color text-uppercase">Education</h3>
-                    <hr class="no-m-top hr-1" />
+                  {this.state.organisations[0].name && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase">
+                        Organisations
+                      </h3>
+                      <hr class="no-m-top hr-1" />
+                      {this.state.organisations.map((data, index) => {
+                        return <p class="font-weight-normal">{data.name}</p>;
+                      })}
+                    </div>
+                  )}
 
-                    {this.state.education.map((data, index) => {
-                      return (
-                        <div className="pb20">
-                          <h4 class="def-text-color no-m-bottom">
-                            {data.Course}
-                          </h4>
-                          <h5 class="no-m-bottom">{data.collegeName}</h5>
-                          <p class="font-italic def-text-color no-m-bottom">
-                            {data.timePeriod}
-                          </p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div>
-                    <h3 class="def-text-color text-uppercase">
-                      Honours and awards
-                    </h3>
-                    <hr class="no-m-top hr-1" />
+                  {this.state.education[0].collegeName && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase">Education</h3>
+                      <hr class="no-m-top hr-1" />
 
-                    {this.state.honoursAndAwards.map((data, index) => {
-                      return (
-                        <div>
-                          <h5 class="no-m-bottom">{data.title}</h5>
-                          <p>{data.challengeName}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
+                      {this.state.education.map((data, index) => {
+                        return (
+                          <div className="pb20">
+                            <h4 class="def-text-color no-m-bottom">
+                              {data.Course}
+                            </h4>
+                            <h5 class="no-m-bottom">{data.collegeName}</h5>
+                            <p class="font-italic def-text-color no-m-bottom">
+                              {data.timePeriod}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {this.state.honoursAndAwards[0].challengeName && (
+                    <div>
+                      <h3 class="def-text-color text-uppercase">
+                        Honours and awards
+                      </h3>
+                      <hr class="no-m-top hr-1" />
+
+                      {this.state.honoursAndAwards.map((data, index) => {
+                        return (
+                          <div>
+                            <h5 class="no-m-bottom">{data.title}</h5>
+                            <p>{data.challengeName}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>{" "}
             </div>
@@ -463,33 +508,6 @@ class App extends Component {
               <div className="col-md-3">
                 <div className="row">
                   <div className="col-md-12">
-                    {" "}
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.loadSampleData();
-                      }}
-                    >
-                      Load sample resume data
-                    </button>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 pt10">
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.clearSampleData();
-                      }}
-                    >
-                      Clear resume data
-                    </button>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12 pt10">
                     <button
                       class="btn btn-secondary btn-sm mr10"
                       type="submit"
@@ -502,6 +520,27 @@ class App extends Component {
                     </button>{" "}
                   </div>
                 </div>
+                <div className="row pt10">
+                  <div className="col-md-12">
+                    {" "}
+                    <button
+                      class="btn btn-secondary btn-sm mr10"
+                      type="submit"
+                      onClick={() => {
+                        this.setState({ isRandomDataPreview: true });
+                        this.loadSampleData();
+                      }}
+                    >
+                      Resume preview with random data
+                    </button>{" "}
+                    <i
+                      class="fas fa-info-circle"
+                      data-toggle="tooltip"
+                      data-placement="right"
+                      title="check how the resume looks without filling any data"
+                    />
+                  </div>
+                </div>
                 <div class="list-group pt10" id="myList" role="tablist">
                   <a
                     class="list-group-item list-group-item-action active"
@@ -509,7 +548,7 @@ class App extends Component {
                     href="#home"
                     role="tab"
                     onClick={e => {
-                      this.setTab("basicInfo");
+                      this.setTab(e, "basicInfo");
                     }}
                   >
                     Basic Info
@@ -520,7 +559,7 @@ class App extends Component {
                     href="#profile"
                     role="tab"
                     onClick={e => {
-                      this.setTab("projects");
+                      this.setTab(e, "projects");
                     }}
                   >
                     Projects
@@ -531,7 +570,7 @@ class App extends Component {
                     href="#messages"
                     role="tab"
                     onClick={e => {
-                      this.setTab("organisations");
+                      this.setTab(e, "organisations");
                     }}
                   >
                     Organisations and Educations
@@ -542,7 +581,7 @@ class App extends Component {
                     href="#settings"
                     role="tab"
                     onClick={e => {
-                      this.setTab("preview");
+                      this.setTab(e, "preview");
                     }}
                   >
                     Honours And Awards
@@ -556,8 +595,8 @@ class App extends Component {
                     </h5>
                     <p class="card-text italic">
                       If you like the free resume builder web app and would like
-                      to donate, then you can pay via PayTm | Google pay| Phone
-                      Pay to 8792092047. <br />
+                      to donate, then you can pay via PayTm | Google pay|
+                      PhonePe to 8792092047. <br />
                       Paypal link paypal.me/RamBharlia
                       <br /> <br />
                       Please feel free to write for any suggestion at
@@ -610,9 +649,9 @@ class App extends Component {
                               class="col-sm-3 col-form-label col-form-label-sm"
                             >
                               Description
-                            </label>
+                            </label>{" "}
                             <div class="col-sm-9">
-                              <input
+                              <textarea
                                 class="form-control form-control-sm"
                                 name="description"
                                 value={this.state.description}
@@ -798,7 +837,7 @@ class App extends Component {
                                           for="colFormLabelSm"
                                           class="col-sm-3 col-form-label col-form-label-sm"
                                         >
-                                          Company Name
+                                          Project
                                         </label>
                                         <div class="col-sm-9">
                                           <input
@@ -823,7 +862,7 @@ class App extends Component {
                                           for="colFormLabelSm"
                                           class="col-sm-3 col-form-label col-form-label-sm"
                                         >
-                                          Position
+                                          Role
                                         </label>
                                         <div class="col-sm-9">
                                           <input
@@ -903,7 +942,13 @@ class App extends Component {
                                           for="colFormLabelSm"
                                           class="col-sm-2.5 col-form-label col-form-label-sm"
                                         >
-                                          Description
+                                          Description &nbsp;
+                                          <i
+                                            class="fas fa-info-circle"
+                                            data-toggle="tooltip"
+                                            data-placement="right"
+                                            title="make sure each point starts with * symbol,  hit enter to add new points"
+                                          />
                                         </label>
                                         <div class="col-sm-10">
                                           <textarea
@@ -1023,7 +1068,7 @@ class App extends Component {
                                               for="colFormLabelSm"
                                               class="col-sm-3 col-form-label col-form-label-sm"
                                             >
-                                              Collage name &nbsp;
+                                              Collage &nbsp;
                                               <i
                                                 class="fas fa-info-circle"
                                                 data-toggle="tooltip"
@@ -1173,7 +1218,7 @@ class App extends Component {
                                       for="colFormLabelSm"
                                       class="col-sm-3 col-form-label col-form-label-sm"
                                     >
-                                      Compitation &nbsp;
+                                      Competation &nbsp;
                                       <i
                                         class="fas fa-info-circle"
                                         data-toggle="tooltip"

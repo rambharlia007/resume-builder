@@ -10,6 +10,7 @@ import "../node_modules/font-awesome/css/font-awesome.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/select2/dist/css/select2.min.css";
 import _ from "lodash";
+
 const jsonData = require("./sampleData.json");
 
 const props = [
@@ -29,6 +30,14 @@ const props = [
   "workExperience"
 ];
 
+const steps = {
+  template: 1,
+  basicInfo: 2,
+  projects: 3,
+  organisationAndEducation: 4,
+  honorAndAwards: 5
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +48,7 @@ class App extends Component {
 
   getState() {
     return {
+      currentStep: steps.template,
       isRandomDataPreview: false,
       mainBackGround: "grey-bg",
       isPreviewMode: false,
@@ -80,6 +90,15 @@ class App extends Component {
           challengeName: "",
           title: ""
         }
+      ],
+      template: [
+        { id: 1, src: "/images/template1.png" },
+        { id: 2, src: "/images/template1.png" },
+        { id: 3, src: "/images/template1.png" },
+        { id: 4, src: "/images/template1.png" },
+        { id: 5, src: "/images/template1.png" },
+        { id: 6, src: "/images/template1.png" },
+        { id: 7, src: "/images/template1.png" }
       ]
     };
   }
@@ -89,14 +108,6 @@ class App extends Component {
     this.setState(this.getState());
   };
   loadSampleData = () => {
-    // $(this.refs.s2_lang)
-    //   .select2()
-    //   .val(jsonData.languages)
-    //   .trigger("change");
-    // $(this.refs.s2_skills)
-    //   .select2()
-    //   .val(jsonData.skills)
-    //   .trigger("change");
     props.forEach((data, index) => {
       this.setState({ [data]: jsonData[data] });
     });
@@ -541,53 +552,6 @@ class App extends Component {
                     />
                   </div>
                 </div>
-                <div class="list-group pt10" id="myList" role="tablist">
-                  <a
-                    class="list-group-item list-group-item-action active"
-                    ref="basicInfo"
-                    href="#home"
-                    role="tab"
-                    onClick={e => {
-                      this.setTab(e, "basicInfo");
-                    }}
-                  >
-                    Basic Info
-                  </a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    ref="projects"
-                    href="#profile"
-                    role="tab"
-                    onClick={e => {
-                      this.setTab(e, "projects");
-                    }}
-                  >
-                    Projects
-                  </a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    ref="organisations"
-                    href="#messages"
-                    role="tab"
-                    onClick={e => {
-                      this.setTab(e, "organisations");
-                    }}
-                  >
-                    Organisations and Educations
-                  </a>
-                  <a
-                    class="list-group-item list-group-item-action"
-                    ref="preview"
-                    href="#settings"
-                    role="tab"
-                    onClick={e => {
-                      this.setTab(e, "preview");
-                    }}
-                  >
-                    Honours And Awards
-                  </a>
-                </div>
-
                 <div class="card pt10">
                   <div class="card-body">
                     <h5 class="card-title def-text-color">
@@ -606,204 +570,223 @@ class App extends Component {
                 </div>
               </div>
               <div className={"col-md-" + this.state.tabContentWidth}>
-                <div class="tab-content">
-                  <div class="tab-pane active" id="home" role="tabpanel">
-                    <div class="card">
-                      <div class="card-body">
-                        <form>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Name
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="name"
-                                value={this.state.name}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Job Title
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Description
-                            </label>{" "}
-                            <div class="col-sm-9">
-                              <textarea
-                                class="form-control form-control-sm"
-                                name="description"
-                                value={this.state.description}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Email
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="email"
-                                value={this.state.email}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Phone Number
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="phoneNumber"
-                                value={this.state.phoneNumber}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Profile pic
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                type="file"
-                                class="form-control-file form-control-sm"
-                                name="profilePicture"
-                                // value={this.state.profilePicture}
-                                onChange={event => {
-                                  this.readURL(event);
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              LinkedIn url
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="linkedIn"
-                                value={this.state.linkedIn}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Skype Id
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="skypeId"
-                                value={this.state.skypeId}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Location
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="location"
-                                value={this.state.location}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Languages &nbsp;
-                              <i
-                                class="fas fa-info-circle"
-                                data-toggle="tooltip"
-                                data-placement="right"
-                                title="If language is not available, please type in the language and hit enter"
-                              />
-                            </label>
-                            <div class="col-sm-9">
-                              <select
-                                class="form-control form-control-sm"
-                                ref="s2_lang"
-                                multiple={true}
-                                class="form-control"
-                                value={this.state.languages}
-                                onChange={this.handleInputChange}
-                              >
-                                <option value="English">English</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Kannada">Kannada</option>
-                                <option value="Tamil">Tamil</option>
-                                <option value="Telugu">Telugu</option>
-                                <option value="Malayalam">Malayalam</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label className="col-sm-3 col-form-label col-form-label-sm">
-                              Skills &nbsp;
-                              <i
-                                class="fas fa-info-circle"
-                                data-toggle="tooltip"
-                                data-placement="right"
-                                title="If Skill is not available in the list, please type in the skill and hit enter"
-                              />
-                            </label>
-                            <div class="col-sm-9">
-                              <select
-                                class="form-control form-control-sm"
-                                ref="s2_skills"
-                                multiple={true}
-                                class="form-control"
-                                value={this.state.skills}
-                                onChange={this.handleInputChange}
-                              >
-                                <option value="Dotnet">Dotnet</option>
-                                <option value="c#">c#</option>
-                                <option value="Java">Java</option>
-                                <option value="Entity Framework">
-                                  Entity Framework
-                                </option>
-                                <option value="Angular">Angular</option>
-                                <option value="React">React</option>
-                              </select>
-                            </div>{" "}
-                          </div>
-                        </form>
-                      </div>
+                {this.state.currentStep === steps.template && (
+                  <div class="card">
+                    <div class="card-body" />
+                    <div className="row">
+                      {this.state.template.map((image, index) => {
+                        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+                          <img
+                            src={image.src}
+                            class={image.class}
+                            onClick={() => {
+                              this.selectTemplateHandler();
+                            }}
+                          />
+                        </div>;
+                      })}
                     </div>
                   </div>
-                  <div class="tab-pane" id="profile" role="tabpanel">
+                )}
+                {this.state.currentStep === steps.basicInfo && (
+                  <div class="card">
+                    <div class="card-body">
+                      <form>
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
+                          >
+                            Name
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="name"
+                              value={this.state.name}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
+                          >
+                            Job Title
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="title"
+                              value={this.state.title}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label
+                            for="colFormLabelSm"
+                            class="col-sm-3 col-form-label col-form-label-sm"
+                          >
+                            Description
+                          </label>{" "}
+                          <div class="col-sm-9">
+                            <textarea
+                              class="form-control form-control-sm"
+                              name="description"
+                              value={this.state.description}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Email
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="email"
+                              value={this.state.email}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Phone Number
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="phoneNumber"
+                              value={this.state.phoneNumber}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Profile pic
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              type="file"
+                              class="form-control-file form-control-sm"
+                              name="profilePicture"
+                              // value={this.state.profilePicture}
+                              onChange={event => {
+                                this.readURL(event);
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            LinkedIn url
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="linkedIn"
+                              value={this.state.linkedIn}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Skype Id
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="skypeId"
+                              value={this.state.skypeId}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Location
+                          </label>
+                          <div class="col-sm-9">
+                            <input
+                              class="form-control form-control-sm"
+                              name="location"
+                              value={this.state.location}
+                              onChange={this.handleInputChange}
+                            />
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label class="col-sm-3 col-form-label col-form-label-sm">
+                            Languages &nbsp;
+                            <i
+                              class="fas fa-info-circle"
+                              data-toggle="tooltip"
+                              data-placement="right"
+                              title="If language is not available, please type in the language and hit enter"
+                            />
+                          </label>
+                          <div class="col-sm-9">
+                            <select
+                              class="form-control form-control-sm"
+                              ref="s2_lang"
+                              multiple={true}
+                              class="form-control"
+                              value={this.state.languages}
+                              onChange={this.handleInputChange}
+                            >
+                              <option value="English">English</option>
+                              <option value="Hindi">Hindi</option>
+                              <option value="Kannada">Kannada</option>
+                              <option value="Tamil">Tamil</option>
+                              <option value="Telugu">Telugu</option>
+                              <option value="Malayalam">Malayalam</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label className="col-sm-3 col-form-label col-form-label-sm">
+                            Skills &nbsp;
+                            <i
+                              class="fas fa-info-circle"
+                              data-toggle="tooltip"
+                              data-placement="right"
+                              title="If Skill is not available in the list, please type in the skill and hit enter"
+                            />
+                          </label>
+                          <div class="col-sm-9">
+                            <select
+                              class="form-control form-control-sm"
+                              ref="s2_skills"
+                              multiple={true}
+                              class="form-control"
+                              value={this.state.skills}
+                              onChange={this.handleInputChange}
+                            >
+                              <option value="Dotnet">Dotnet</option>
+                              <option value="c#">c#</option>
+                              <option value="Java">Java</option>
+                              <option value="Entity Framework">
+                                Entity Framework
+                              </option>
+                              <option value="Angular">Angular</option>
+                              <option value="React">React</option>
+                            </select>
+                          </div>{" "}
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+
+                {this.state.currentStep === steps.projects && (
+                  <div>
                     <div id="accordion-company">
                       {this.state.workExperience.map((value, index) => {
                         return (
@@ -988,7 +971,10 @@ class App extends Component {
                       Add Project
                     </button>
                   </div>
-                  <div class="tab-pane" id="messages" role="tabpanel">
+                )}
+
+                {this.state.currentStep === steps.projects && (
+                  <div>
                     <div class="card">
                       <div class="card-body">
                         <div className="row">
@@ -1182,7 +1168,10 @@ class App extends Component {
                       Add Education
                     </button>
                   </div>
-                  <div class="tab-pane" id="settings" role="tabpanel">
+                )}
+
+                {this.state.currentStep === steps.projects && (
+                  <div>
                     <h5 class="card-title">Honours and Awards</h5>
                     <div id="accordion-honours_and_awards">
                       {this.state.honoursAndAwards.map((value, index) => {
@@ -1288,6 +1277,20 @@ class App extends Component {
                       onClick={this.addHonoursAndAward}
                     >
                       Add Honours and Awards
+                    </button>
+                  </div>
+                )}
+
+                <div className="row pt10">
+                  <div className="col-md-12">
+                    <button type="button" class="btn btn-success btn-sm mr10">
+                      Preview
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm mr10">
+                      Previous
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm mr10">
+                      Next
                     </button>
                   </div>
                 </div>

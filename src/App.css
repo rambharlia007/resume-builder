@@ -93,6 +93,10 @@
   border-top: 3px solid #3ec7b9;
 }
 
+.select-image {
+  border: 3px solid #2596d8;
+}
+
 .skill-padding {
   background-color: #3ec7b9;
   padding: 5px 10px 5px 10px;

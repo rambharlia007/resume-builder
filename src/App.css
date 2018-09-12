@@ -76,7 +76,9 @@
 .pb10 {
   padding-bottom: 10px;
 }
-
+.pb5 {
+  padding-bottom: 5px;
+}
 .fs13 {
   font-size: 1.3em !important;
 }
@@ -89,11 +91,28 @@
   padding-top: 20px;
 }
 
+.pl10 {
+  padding-left: 10px;
+}
+
+.mh500 {
+  max-height: 600px;
+}
+
 .hr_green {
   border-top: 3px solid #3ec7b9;
 }
 
-.select-image {
+.float-right {
+  float: right;
+}
+.disable-template {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.active-template {
   border: 3px solid #2596d8;
 }
 

@@ -48,6 +48,7 @@ class App extends Component {
 
   getState() {
     return {
+      isThirdPartSet: false,
       currentStep: steps.template,
       isRandomDataPreview: false,
       mainBackGround: "grey-bg",
@@ -92,16 +93,33 @@ class App extends Component {
         }
       ],
       template: [
-        { id: 1, src: "/images/template1.png" },
-        { id: 2, src: "/images/template1.png" },
-        { id: 3, src: "/images/template1.png" },
-        { id: 4, src: "/images/template1.png" },
-        { id: 5, src: "/images/template1.png" },
-        { id: 6, src: "/images/template1.png" },
-        { id: 7, src: "/images/template1.png" }
+        { id: 1, src: "/images/template1.png", active: false, activeClass: "" },
+        {
+          id: 2,
+          src: "/images/template2.png",
+          active: false,
+          activeClass: "disable-template "
+        },
+        {
+          id: 3,
+          src: "/images/template3.png",
+          active: false,
+          activeClass: "disable-template "
+        }
       ]
     };
   }
+
+  selectTemplateHandler = index => {
+    const tempData = this.state.template;
+    tempData.forEach((data, index) => {
+      data.active = false;
+      tempData[index].activeClass = index == 0 ? "" : "disable-template";
+    });
+    tempData[index].active = true;
+    tempData[index].activeClass = "active-template";
+    this.setState({ template: tempData });
+  };
 
   handleUploadImage = () => {};
   clearSampleData = () => {
@@ -185,15 +203,16 @@ class App extends Component {
     });
   }
 
-  setTab = (e, value) => {
-    e.preventDefault();
-    if (value == "basicInfo") this.setState({ tabContentWidth: 6 });
-    else if (value === "projects") this.setState({ tabContentWidth: 9 });
-    else if (value === "organisations") this.setState({ tabContentWidth: 9 });
-    else if (value === "preview") this.setState({ tabContentWidth: 7 });
-    else if (value === "template_preview")
+  setTab = value => {
+    this.setState({ isThirdPartSet: false });
+    this.setState({ currentStep: value });
+    if (value == steps.basicInfo) {
+      this.setState({ tabContentWidth: 6 });
+    } else if (value === steps.projects) this.setState({ tabContentWidth: 9 });
+    else if (value === steps.organisationAndEducation)
       this.setState({ tabContentWidth: 9 });
-    $(this.refs[value]).tab("show");
+    else if (value === steps.honorAndAwards)
+      this.setState({ tabContentWidth: 7 });
   };
 
   setSelect2Component = () => {
@@ -236,6 +255,9 @@ class App extends Component {
     //   alert("right click disabled");
     //   return true;
     // });
+  }
+
+  initialiseToolTip() {
     $('[data-toggle="tooltip"]').tooltip();
   }
 
@@ -243,7 +265,14 @@ class App extends Component {
     this.setThirdParty();
   }
   componentDidUpdate() {
-    this.setThirdParty();
+    if (
+      this.state.currentStep === steps.basicInfo &&
+      !this.state.isThirdPartSet
+    ) {
+      this.setState({ isThirdPartSet: true });
+      this.setThirdParty();
+    }
+    this.initialiseToolTip();
   }
   printDiv() {
     window.print();
@@ -517,41 +546,6 @@ class App extends Component {
           {!this.state.isPreviewMode && (
             <div className="row nonPrintable">
               <div className="col-md-3">
-                <div className="row">
-                  <div className="col-md-12">
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.setState({ isPreviewMode: true });
-                        this.setState({ mainBackGround: "white-bg" });
-                      }}
-                    >
-                      Resume preview
-                    </button>{" "}
-                  </div>
-                </div>
-                <div className="row pt10">
-                  <div className="col-md-12">
-                    {" "}
-                    <button
-                      class="btn btn-secondary btn-sm mr10"
-                      type="submit"
-                      onClick={() => {
-                        this.setState({ isRandomDataPreview: true });
-                        this.loadSampleData();
-                      }}
-                    >
-                      Resume preview with random data
-                    </button>{" "}
-                    <i
-                      class="fas fa-info-circle"
-                      data-toggle="tooltip"
-                      data-placement="right"
-                      title="check how the resume looks without filling any data"
-                    />
-                  </div>
-                </div>
                 <div class="card pt10">
                   <div class="card-body">
                     <h5 class="card-title def-text-color">
@@ -571,222 +565,323 @@ class App extends Component {
               </div>
               <div className={"col-md-" + this.state.tabContentWidth}>
                 {this.state.currentStep === steps.template && (
-                  <div class="card">
-                    <div class="card-body" />
-                    <div className="row">
-                      {this.state.template.map((image, index) => {
-                        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
-                          <img
-                            src={image.src}
-                            class={image.class}
-                            onClick={() => {
-                              this.selectTemplateHandler();
-                            }}
-                          />
-                        </div>;
-                      })}
-                    </div>
-                  </div>
-                )}
-                {this.state.currentStep === steps.basicInfo && (
-                  <div class="card">
-                    <div class="card-body">
-                      <form>
-                        <div class="form-group row">
-                          <label
-                            for="colFormLabelSm"
-                            class="col-sm-3 col-form-label col-form-label-sm"
+                  <div>
+                    <h5>Select template</h5>
+                    <div className="row justify-content-md-center mh500">
+                      <div className="col-md-12">
+                        <ul class="nav nav-tabs pb5" id="myTab" role="tablist">
+                          <li class="nav-item">
+                            <a
+                              class="nav-link active"
+                              id="home-tab"
+                              data-toggle="tab"
+                              href="#home"
+                              role="tab"
+                              aria-controls="home"
+                              aria-selected="true"
+                            >
+                              Template 1
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="profile-tab"
+                              data-toggle="tab"
+                              href="#profile"
+                              role="tab"
+                              aria-controls="profile"
+                              aria-selected="false"
+                            >
+                              Template 2
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              class="nav-link"
+                              id="contact-tab"
+                              data-toggle="tab"
+                              href="#contact"
+                              role="tab"
+                              aria-controls="contact"
+                              aria-selected="false"
+                            >
+                              Template 3
+                            </a>
+                          </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                          <div
+                            class="tab-pane fade show active"
+                            id="home"
+                            role="tabpanel"
+                            aria-labelledby="home-tab"
                           >
-                            Name
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="name"
-                              value={this.state.name}
-                              onChange={this.handleInputChange}
+                            <img
+                              width="100%"
+                              height="550"
+                              src={this.state.template[0].src}
+                              class={this.state.template[0].activeClass}
+                              onClick={() => {
+                                this.selectTemplateHandler(1);
+                              }}
                             />
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label
-                            for="colFormLabelSm"
-                            class="col-sm-3 col-form-label col-form-label-sm"
+                          <div
+                            class="tab-pane fade"
+                            id="profile"
+                            role="tabpanel"
+                            aria-labelledby="profile-tab"
                           >
-                            Job Title
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="title"
-                              value={this.state.title}
-                              onChange={this.handleInputChange}
+                            <img
+                              width="100%"
+                              height="550"
+                              src={this.state.template[1].src}
+                              class={this.state.template[1].activeClass}
+                              onClick={() => {
+                                this.selectTemplateHandler(1);
+                              }}
                             />
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label
-                            for="colFormLabelSm"
-                            class="col-sm-3 col-form-label col-form-label-sm"
+                          <div
+                            class="tab-pane fade"
+                            id="contact"
+                            role="tabpanel"
+                            aria-labelledby="contact-tab"
                           >
-                            Description
-                          </label>{" "}
-                          <div class="col-sm-9">
-                            <textarea
-                              class="form-control form-control-sm"
-                              name="description"
-                              value={this.state.description}
-                              onChange={this.handleInputChange}
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Email
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="email"
-                              value={this.state.email}
-                              onChange={this.handleInputChange}
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Phone Number
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="phoneNumber"
-                              value={this.state.phoneNumber}
-                              onChange={this.handleInputChange}
-                            />
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Profile pic
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              type="file"
-                              class="form-control-file form-control-sm"
-                              name="profilePicture"
-                              // value={this.state.profilePicture}
-                              onChange={event => {
-                                this.readURL(event);
+                            <img
+                              width="100%"
+                              height="550"
+                              src={this.state.template[2].src}
+                              class={this.state.template[2].activeClass}
+                              onClick={() => {
+                                this.selectTemplateHandler(1);
                               }}
                             />
                           </div>
                         </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            LinkedIn url
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="linkedIn"
-                              value={this.state.linkedIn}
-                              onChange={this.handleInputChange}
-                            />
+                      </div>
+                      {/* {this.state.template.map((image, index) => {
+                          return (
+                            <div class="col-md-8">
+                              <img
+                                width="85%"
+                                height="85%"
+                                src={image.src}
+                                class={image.activeClass}
+                                onClick={() => {
+                                  this.selectTemplateHandler(index);
+                                }}
+                              />
+                            </div>
+                          );
+                        })} */}
+                    </div>{" "}
+                  </div>
+                )}
+                {this.state.currentStep === steps.basicInfo && (
+                  <div>
+                    <h5>Basic Info</h5>
+                    <div class="card">
+                      <div class="card-body">
+                        <form>
+                          <div class="form-group row">
+                            <label
+                              for="colFormLabelSm"
+                              class="col-sm-3 col-form-label col-form-label-sm"
+                            >
+                              Name
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="name"
+                                value={this.state.name}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Skype Id
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="skypeId"
-                              value={this.state.skypeId}
-                              onChange={this.handleInputChange}
-                            />
+                          <div class="form-group row">
+                            <label
+                              for="colFormLabelSm"
+                              class="col-sm-3 col-form-label col-form-label-sm"
+                            >
+                              Job Title
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="title"
+                                value={this.state.title}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Location
-                          </label>
-                          <div class="col-sm-9">
-                            <input
-                              class="form-control form-control-sm"
-                              name="location"
-                              value={this.state.location}
-                              onChange={this.handleInputChange}
-                            />
+                          <div class="form-group row">
+                            <label
+                              for="colFormLabelSm"
+                              class="col-sm-3 col-form-label col-form-label-sm"
+                            >
+                              Description
+                            </label>{" "}
+                            <div class="col-sm-9">
+                              <textarea
+                                class="form-control form-control-sm"
+                                name="description"
+                                value={this.state.description}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
                           </div>
-                        </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Email
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="email"
+                                value={this.state.email}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Phone Number
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="phoneNumber"
+                                value={this.state.phoneNumber}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Profile pic
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                type="file"
+                                class="form-control-file form-control-sm"
+                                name="profilePicture"
+                                // value={this.state.profilePicture}
+                                onChange={event => {
+                                  this.readURL(event);
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              LinkedIn url
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="linkedIn"
+                                value={this.state.linkedIn}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Skype Id
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="skypeId"
+                                value={this.state.skypeId}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Location
+                            </label>
+                            <div class="col-sm-9">
+                              <input
+                                class="form-control form-control-sm"
+                                name="location"
+                                value={this.state.location}
+                                onChange={this.handleInputChange}
+                              />
+                            </div>
+                          </div>
 
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label col-form-label-sm">
-                            Languages &nbsp;
-                            <i
-                              class="fas fa-info-circle"
-                              data-toggle="tooltip"
-                              data-placement="right"
-                              title="If language is not available, please type in the language and hit enter"
-                            />
-                          </label>
-                          <div class="col-sm-9">
-                            <select
-                              class="form-control form-control-sm"
-                              ref="s2_lang"
-                              multiple={true}
-                              class="form-control"
-                              value={this.state.languages}
-                              onChange={this.handleInputChange}
-                            >
-                              <option value="English">English</option>
-                              <option value="Hindi">Hindi</option>
-                              <option value="Kannada">Kannada</option>
-                              <option value="Tamil">Tamil</option>
-                              <option value="Telugu">Telugu</option>
-                              <option value="Malayalam">Malayalam</option>
-                            </select>
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label col-form-label-sm">
+                              Languages &nbsp;
+                              <i
+                                class="fas fa-info-circle"
+                                data-toggle="tooltip"
+                                data-placement="right"
+                                title="If language is not available, please type in the language and hit enter"
+                              />
+                            </label>
+                            <div class="col-sm-9">
+                              <select
+                                class="form-control form-control-sm"
+                                ref="s2_lang"
+                                multiple={true}
+                                class="form-control"
+                                value={this.state.languages}
+                                onChange={this.handleInputChange}
+                              >
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Kannada">Kannada</option>
+                                <option value="Tamil">Tamil</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Malayalam">Malayalam</option>
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                        <div class="form-group row">
-                          <label className="col-sm-3 col-form-label col-form-label-sm">
-                            Skills &nbsp;
-                            <i
-                              class="fas fa-info-circle"
-                              data-toggle="tooltip"
-                              data-placement="right"
-                              title="If Skill is not available in the list, please type in the skill and hit enter"
-                            />
-                          </label>
-                          <div class="col-sm-9">
-                            <select
-                              class="form-control form-control-sm"
-                              ref="s2_skills"
-                              multiple={true}
-                              class="form-control"
-                              value={this.state.skills}
-                              onChange={this.handleInputChange}
-                            >
-                              <option value="Dotnet">Dotnet</option>
-                              <option value="c#">c#</option>
-                              <option value="Java">Java</option>
-                              <option value="Entity Framework">
-                                Entity Framework
-                              </option>
-                              <option value="Angular">Angular</option>
-                              <option value="React">React</option>
-                            </select>
-                          </div>{" "}
-                        </div>
-                      </form>
-                    </div>
+                          <div class="form-group row">
+                            <label className="col-sm-3 col-form-label col-form-label-sm">
+                              Skills &nbsp;
+                              <i
+                                class="fas fa-info-circle"
+                                data-toggle="tooltip"
+                                data-placement="right"
+                                title="If Skill is not available in the list, please type in the skill and hit enter"
+                              />
+                            </label>
+                            <div class="col-sm-9">
+                              <select
+                                class="form-control form-control-sm"
+                                ref="s2_skills"
+                                multiple={true}
+                                class="form-control"
+                                value={this.state.skills}
+                                onChange={this.handleInputChange}
+                              >
+                                <option value="Dotnet">Dotnet</option>
+                                <option value="c#">c#</option>
+                                <option value="Java">Java</option>
+                                <option value="Entity Framework">
+                                  Entity Framework
+                                </option>
+                                <option value="Angular">Angular</option>
+                                <option value="React">React</option>
+                              </select>
+                            </div>{" "}
+                          </div>
+                        </form>
+                      </div>
+                    </div>{" "}
                   </div>
                 )}
 
                 {this.state.currentStep === steps.projects && (
                   <div>
+                    <h5>Work Experience</h5>
                     <div id="accordion-company">
                       {this.state.workExperience.map((value, index) => {
                         return (
@@ -973,7 +1068,7 @@ class App extends Component {
                   </div>
                 )}
 
-                {this.state.currentStep === steps.projects && (
+                {this.state.currentStep === steps.organisationAndEducation && (
                   <div>
                     <div class="card">
                       <div class="card-body">
@@ -1054,7 +1149,7 @@ class App extends Component {
                                               for="colFormLabelSm"
                                               class="col-sm-3 col-form-label col-form-label-sm"
                                             >
-                                              Collage &nbsp;
+                                              University &nbsp;
                                               <i
                                                 class="fas fa-info-circle"
                                                 data-toggle="tooltip"
@@ -1170,9 +1265,9 @@ class App extends Component {
                   </div>
                 )}
 
-                {this.state.currentStep === steps.projects && (
+                {this.state.currentStep === steps.honorAndAwards && (
                   <div>
-                    <h5 class="card-title">Honours and Awards</h5>
+                    <h5>Honours and Awards</h5>
                     <div id="accordion-honours_and_awards">
                       {this.state.honoursAndAwards.map((value, index) => {
                         return (
@@ -1207,7 +1302,7 @@ class App extends Component {
                                       for="colFormLabelSm"
                                       class="col-sm-3 col-form-label col-form-label-sm"
                                     >
-                                      Competation &nbsp;
+                                      Competition &nbsp;
                                       <i
                                         class="fas fa-info-circle"
                                         data-toggle="tooltip"
@@ -1283,15 +1378,41 @@ class App extends Component {
 
                 <div className="row pt10">
                   <div className="col-md-12">
-                    <button type="button" class="btn btn-success btn-sm mr10">
-                      Preview
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm mr10">
-                      Previous
-                    </button>
-                    <button type="button" class="btn btn-success btn-sm mr10">
-                      Next
-                    </button>
+                    {this.state.currentStep !== steps.template &&
+                      this.state.currentStep !== steps.basicInfo && (
+                        <button
+                          type="button"
+                          class="btn btn-success btn-sm float-right"
+                          onClick={() => {
+                            this.setState({ isPreviewMode: true });
+                            this.setState({ mainBackGround: "white-bg" });
+                          }}
+                        >
+                          Resume Preview
+                        </button>
+                      )}
+                    {this.state.currentStep !== steps.template && (
+                      <button
+                        type="button"
+                        class="btn btn-success btn-sm mr10"
+                        onClick={() => {
+                          this.setTab(this.state.currentStep - 1);
+                        }}
+                      >
+                        Previous
+                      </button>
+                    )}
+                    {this.state.currentStep !== steps.honorAndAwards && (
+                      <button
+                        type="button"
+                        class="btn btn-success btn-sm mr10"
+                        onClick={() => {
+                          this.setTab(this.state.currentStep + 1);
+                        }}
+                      >
+                        Next
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

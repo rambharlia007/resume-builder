@@ -10,8 +10,11 @@ import "../node_modules/font-awesome/css/font-awesome.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/select2/dist/css/select2.min.css";
 import _ from "lodash";
+import ReactFileReader from "react-file-reader";
 
-const jsonData = require("./sampleData.json");
+var fileDownload = require("js-file-download");
+
+let jsonData = {}; // require("./sampleData.json");
 
 const props = [
   "title",
@@ -31,11 +34,13 @@ const props = [
 ];
 
 const steps = {
+  start: 0,
   template: 1,
   basicInfo: 2,
   projects: 3,
-  organisationAndEducation: 4,
-  honorAndAwards: 5
+  organisation: 4,
+  education: 5,
+  honorAndAwards: 6
 };
 
 class App extends Component {
@@ -48,8 +53,9 @@ class App extends Component {
 
   getState() {
     return {
+      currentStepTitle: "How do you want to start?",
       isThirdPartSet: false,
-      currentStep: steps.template,
+      currentStep: steps.start,
       isRandomDataPreview: false,
       mainBackGround: "grey-bg",
       isPreviewMode: false,
@@ -123,7 +129,11 @@ class App extends Component {
 
   handleUploadImage = () => {};
   clearSampleData = () => {
+    let currentState = this.state.currentStep;
     this.setState(this.getState());
+    if (currentState === steps.start)
+      this.setState({ currentState: steps.template });
+    else this.setState({ currentState: currentState });
   };
   loadSampleData = () => {
     props.forEach((data, index) => {
@@ -206,13 +216,20 @@ class App extends Component {
   setTab = value => {
     this.setState({ isThirdPartSet: false });
     this.setState({ currentStep: value });
-    if (value == steps.basicInfo) {
-      this.setState({ tabContentWidth: 6 });
-    } else if (value === steps.projects) this.setState({ tabContentWidth: 9 });
-    else if (value === steps.organisationAndEducation)
-      this.setState({ tabContentWidth: 9 });
+    if (value == steps.start) {
+      this.setState({ currentStepTitle: "How do you want to start?" });
+    } else if (value == steps.template) {
+      this.setState({ currentStepTitle: "Select template" });
+    } else if (value == steps.basicInfo) {
+      this.setState({ currentStepTitle: "Basic Info" });
+    } else if (value === steps.projects)
+      this.setState({ currentStepTitle: "Work Experience" });
+    else if (value === steps.organisation)
+      this.setState({ currentStepTitle: "Organisations" });
+    else if (value === steps.education)
+      this.setState({ currentStepTitle: "Education" });
     else if (value === steps.honorAndAwards)
-      this.setState({ tabContentWidth: 7 });
+      this.setState({ currentStepTitle: "Honours and Awards" });
   };
 
   setSelect2Component = () => {
@@ -284,6 +301,25 @@ class App extends Component {
     });
   };
 
+  downloadFile = () => {
+    let fileData = {};
+    props.forEach((data, index) => {
+      fileData[data] = this.state[data];
+    });
+    fileDownload(JSON.stringify(fileData), `${this.state.name}.json`);
+  };
+
+  handleFiles = e => {
+    let file = e.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onloadend = e => {
+      const content = fileReader.result;
+      jsonData = JSON.parse(content);
+      this.loadSampleData();
+    };
+    fileReader.readAsText(file);
+  };
+
   render() {
     return (
       <div className="App">
@@ -314,9 +350,9 @@ class App extends Component {
                     onClick={() => {
                       this.setState({ isPreviewMode: false });
                       this.setState({ mainBackGround: "grey-bg" });
-                      if (this.state.isRandomDataPreview) {
-                        this.setState({ isRandomDataPreview: true });
-                        this.clearSampleData();
+                      if (this.state.currentStep === steps.start) {
+                        this.setState({ currentStep: steps.template });
+                        this.setState({ currentStepTitle: "Select template" });
                       }
                     }}
                   >
@@ -544,124 +580,148 @@ class App extends Component {
           )}
 
           {!this.state.isPreviewMode && (
-            <div className="row nonPrintable">
-              <div className="col-md-3">
-                <div class="card pt10">
-                  <div class="card-body">
-                    <h5 class="card-title def-text-color">
-                      Wanna Buy Me A Coffee?
-                    </h5>
-                    <p class="card-text italic">
-                      If you like the free resume builder web app and would like
-                      to donate, then you can pay via PayTm | Google pay|
-                      PhonePe to 8792092047. <br />
-                      Paypal link paypal.me/RamBharlia
-                      <br /> <br />
-                      Please feel free to write for any suggestion at
-                      rambharlia007@gmail.com
-                    </p>
-                  </div>
+            <div className="nonPrintable">
+              <div className="row">
+                <div className="col-md-6 offset-md-3 tac">
+                  <h5>{this.state.currentStepTitle}</h5>
                 </div>
               </div>
-              <div className={"col-md-" + this.state.tabContentWidth}>
-                {this.state.currentStep === steps.template && (
-                  <div>
-                    <h5>Select template</h5>
-                    <div className="row justify-content-md-center mh500">
-                      <div className="col-md-12">
-                        <ul class="nav nav-tabs pb5" id="myTab" role="tablist">
-                          <li class="nav-item">
-                            <a
-                              class="nav-link active"
-                              id="home-tab"
-                              data-toggle="tab"
-                              href="#home"
-                              role="tab"
-                              aria-controls="home"
-                              aria-selected="true"
-                            >
-                              Template 1
-                            </a>
-                          </li>
-                          <li class="nav-item">
-                            <a
-                              class="nav-link"
-                              id="profile-tab"
-                              data-toggle="tab"
-                              href="#profile"
-                              role="tab"
-                              aria-controls="profile"
-                              aria-selected="false"
-                            >
-                              Template 2
-                            </a>
-                          </li>
-                          <li class="nav-item">
-                            <a
-                              class="nav-link"
-                              id="contact-tab"
-                              data-toggle="tab"
-                              href="#contact"
-                              role="tab"
-                              aria-controls="contact"
-                              aria-selected="false"
-                            >
-                              Template 3
-                            </a>
-                          </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                          <div
-                            class="tab-pane fade show active"
-                            id="home"
-                            role="tabpanel"
-                            aria-labelledby="home-tab"
+              <div className="row">
+                <div className="col-md-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title def-text-color">
+                        About single page resume builder
+                      </h5>
+                      <p class="card-text italic">
+                        Create your resume in minutes using our free single page
+                        resume builder. Build the perfect resume and get the job
+                        you deserve! <br /> <br />
+                        <h5> How to use single page resume buildler </h5> *
+                        Select the available templates <br /> * fill in the
+                        basic info, work experience, organisations, education,
+                        Honours and Awards sections <br /> * click on the
+                        preview button to see how your resume looks <br /> *
+                        download the file and use next time to save time filling
+                        the form again <br />* In preview mode, click on the
+                        print button and change the settings to save the file in
+                        pfd format and click on save. <br /> <br />{" "}
+                        <h5>Filling the form every time is boring ? </h5> * for
+                        the first time when the form is filled, you can download
+                        the file which is in the json format <br /> * make sure
+                        you keep this file in some safe location, or upload in
+                        the drive <br /> * now you can upload the json file in
+                        the resume builder and all the form contents will
+                        prefill automatically. <br /> * click on the preview
+                        button to see how your resume looks, <br /> * In preview
+                        mode, click on the print button and change the settings
+                        to save the file in pfd format and click on save.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className={"col-md-" + this.state.tabContentWidth}>
+                  {this.state.currentStep === steps.template && (
+                    <div>
+                      <div className="row justify-content-md-center mh500">
+                        <div className="col-md-12">
+                          <ul
+                            class="nav nav-tabs pb5"
+                            id="myTab"
+                            role="tablist"
                           >
-                            <img
-                              width="100%"
-                              height="550"
-                              src={this.state.template[0].src}
-                              class={this.state.template[0].activeClass}
-                              onClick={() => {
-                                this.selectTemplateHandler(1);
-                              }}
-                            />
-                          </div>
-                          <div
-                            class="tab-pane fade"
-                            id="profile"
-                            role="tabpanel"
-                            aria-labelledby="profile-tab"
-                          >
-                            <img
-                              width="100%"
-                              height="550"
-                              src={this.state.template[1].src}
-                              class={this.state.template[1].activeClass}
-                              onClick={() => {
-                                this.selectTemplateHandler(1);
-                              }}
-                            />
-                          </div>
-                          <div
-                            class="tab-pane fade"
-                            id="contact"
-                            role="tabpanel"
-                            aria-labelledby="contact-tab"
-                          >
-                            <img
-                              width="100%"
-                              height="550"
-                              src={this.state.template[2].src}
-                              class={this.state.template[2].activeClass}
-                              onClick={() => {
-                                this.selectTemplateHandler(1);
-                              }}
-                            />
+                            <li class="nav-item">
+                              <a
+                                class="nav-link active"
+                                id="home-tab"
+                                data-toggle="tab"
+                                href="#home"
+                                role="tab"
+                                aria-controls="home"
+                                aria-selected="true"
+                              >
+                                Template 1
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a
+                                class="nav-link"
+                                id="profile-tab"
+                                data-toggle="tab"
+                                href="#profile"
+                                role="tab"
+                                aria-controls="profile"
+                                aria-selected="false"
+                              >
+                                Template 2
+                              </a>
+                            </li>
+                            <li class="nav-item">
+                              <a
+                                class="nav-link"
+                                id="contact-tab"
+                                data-toggle="tab"
+                                href="#contact"
+                                role="tab"
+                                aria-controls="contact"
+                                aria-selected="false"
+                              >
+                                Template 3
+                              </a>
+                            </li>
+                          </ul>
+                          <div class="tab-content" id="myTabContent">
+                            <div
+                              class="tab-pane fade show active"
+                              id="home"
+                              role="tabpanel"
+                              aria-labelledby="home-tab"
+                            >
+                              <img
+                                width="100%"
+                                height="550"
+                                src={this.state.template[0].src}
+                                class={this.state.template[0].activeClass}
+                                onClick={() => {
+                                  this.selectTemplateHandler(1);
+                                }}
+                              />
+                            </div>
+                            <div
+                              class="tab-pane fade"
+                              id="profile"
+                              role="tabpanel"
+                              aria-labelledby="profile-tab"
+                            >
+                              <img
+                                width="100%"
+                                height="550"
+                                src={this.state.template[1].src}
+                                class={this.state.template[1].activeClass}
+                                onClick={() => {
+                                  this.selectTemplateHandler(1);
+                                }}
+                              />
+                            </div>
+                            <div
+                              class="tab-pane fade"
+                              id="contact"
+                              role="tabpanel"
+                              aria-labelledby="contact-tab"
+                            >
+                              <img
+                                width="100%"
+                                height="550"
+                                src={this.state.template[2].src}
+                                class={this.state.template[2].activeClass}
+                                onClick={() => {
+                                  this.selectTemplateHandler(1);
+                                }}
+                              />
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      {/* {this.state.template.map((image, index) => {
+                        {/* {this.state.template.map((image, index) => {
                           return (
                             <div class="col-md-8">
                               <img
@@ -676,743 +736,853 @@ class App extends Component {
                             </div>
                           );
                         })} */}
-                    </div>{" "}
-                  </div>
-                )}
-                {this.state.currentStep === steps.basicInfo && (
-                  <div>
-                    <h5>Basic Info</h5>
-                    <div class="card">
-                      <div class="card-body">
-                        <form>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Name
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="name"
-                                value={this.state.name}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Job Title
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="title"
-                                value={this.state.title}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label
-                              for="colFormLabelSm"
-                              class="col-sm-3 col-form-label col-form-label-sm"
-                            >
-                              Description
-                            </label>{" "}
-                            <div class="col-sm-9">
-                              <textarea
-                                class="form-control form-control-sm"
-                                name="description"
-                                value={this.state.description}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Email
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="email"
-                                value={this.state.email}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Phone Number
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="phoneNumber"
-                                value={this.state.phoneNumber}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Profile pic
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                type="file"
-                                class="form-control-file form-control-sm"
-                                name="profilePicture"
-                                // value={this.state.profilePicture}
-                                onChange={event => {
-                                  this.readURL(event);
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              LinkedIn url
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="linkedIn"
-                                value={this.state.linkedIn}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Skype Id
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="skypeId"
-                                value={this.state.skypeId}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Location
-                            </label>
-                            <div class="col-sm-9">
-                              <input
-                                class="form-control form-control-sm"
-                                name="location"
-                                value={this.state.location}
-                                onChange={this.handleInputChange}
-                              />
-                            </div>
-                          </div>
-
-                          <div class="form-group row">
-                            <label class="col-sm-3 col-form-label col-form-label-sm">
-                              Languages &nbsp;
-                              <i
-                                class="fas fa-info-circle"
-                                data-toggle="tooltip"
-                                data-placement="right"
-                                title="If language is not available, please type in the language and hit enter"
-                              />
-                            </label>
-                            <div class="col-sm-9">
-                              <select
-                                class="form-control form-control-sm"
-                                ref="s2_lang"
-                                multiple={true}
-                                class="form-control"
-                                value={this.state.languages}
-                                onChange={this.handleInputChange}
-                              >
-                                <option value="English">English</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Kannada">Kannada</option>
-                                <option value="Tamil">Tamil</option>
-                                <option value="Telugu">Telugu</option>
-                                <option value="Malayalam">Malayalam</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="form-group row">
-                            <label className="col-sm-3 col-form-label col-form-label-sm">
-                              Skills &nbsp;
-                              <i
-                                class="fas fa-info-circle"
-                                data-toggle="tooltip"
-                                data-placement="right"
-                                title="If Skill is not available in the list, please type in the skill and hit enter"
-                              />
-                            </label>
-                            <div class="col-sm-9">
-                              <select
-                                class="form-control form-control-sm"
-                                ref="s2_skills"
-                                multiple={true}
-                                class="form-control"
-                                value={this.state.skills}
-                                onChange={this.handleInputChange}
-                              >
-                                <option value="Dotnet">Dotnet</option>
-                                <option value="c#">c#</option>
-                                <option value="Java">Java</option>
-                                <option value="Entity Framework">
-                                  Entity Framework
-                                </option>
-                                <option value="Angular">Angular</option>
-                                <option value="React">React</option>
-                              </select>
-                            </div>{" "}
-                          </div>
-                        </form>
-                      </div>
-                    </div>{" "}
-                  </div>
-                )}
-
-                {this.state.currentStep === steps.projects && (
-                  <div>
-                    <h5>Work Experience</h5>
-                    <div id="accordion-company">
-                      {this.state.workExperience.map((value, index) => {
-                        return (
-                          <div class="card" key={index}>
-                            <div class="card-header p0">
-                              <h5 class="mb-0">
-                                <button
-                                  class="btn btn-link"
-                                  data-toggle="collapse"
-                                  data-target={"#company-" + index}
-                                  aria-expanded="true"
-                                  aria-controls={"company-" + index}
-                                >
-                                  {value.name}
-                                </button>
-                              </h5>
-                            </div>
-
-                            <div
-                              id={"company-" + index}
-                              class="collapse show"
-                              aria-labelledby="headingOne"
-                              data-parent="#accordion-company"
-                            >
-                              <div class="card-body">
-                                <form>
-                                  <div className="row">
-                                    <div className="col-md-5">
-                                      <div class="form-group row">
-                                        <label
-                                          for="colFormLabelSm"
-                                          class="col-sm-3 col-form-label col-form-label-sm"
-                                        >
-                                          Project
-                                        </label>
-                                        <div class="col-sm-9">
-                                          <input
-                                            class="form-control form-control-sm"
-                                            name="name"
-                                            value={
-                                              this.state.workExperience[index]
-                                                .name
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "workExperience"
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                      <div class="form-group row">
-                                        <label
-                                          for="colFormLabelSm"
-                                          class="col-sm-3 col-form-label col-form-label-sm"
-                                        >
-                                          Role
-                                        </label>
-                                        <div class="col-sm-9">
-                                          <input
-                                            type="email"
-                                            class="form-control form-control-sm"
-                                            name="position"
-                                            value={
-                                              this.state.workExperience[index]
-                                                .position
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "workExperience"
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                      <div class="form-group row">
-                                        <label
-                                          for="colFormLabelSm"
-                                          class="col-sm-3 col-form-label col-form-label-sm"
-                                        >
-                                          Location
-                                        </label>
-                                        <div class="col-sm-9">
-                                          <input
-                                            type="email"
-                                            class="form-control form-control-sm"
-                                            name="location"
-                                            value={
-                                              this.state.workExperience[index]
-                                                .location
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "workExperience"
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                      <div class="form-group row">
-                                        <label
-                                          for="colFormLabelSm"
-                                          class="col-sm-3 col-form-label col-form-label-sm"
-                                        >
-                                          Date
-                                        </label>
-                                        <div class="col-sm-9">
-                                          <input
-                                            type="email"
-                                            class="form-control form-control-sm"
-                                            name="date"
-                                            value={
-                                              this.state.workExperience[index]
-                                                .date
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "workExperience"
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="col-md-7">
-                                      <div class="form-group row">
-                                        <label
-                                          for="colFormLabelSm"
-                                          class="col-sm-2.5 col-form-label col-form-label-sm"
-                                        >
-                                          Description &nbsp;
-                                          <i
-                                            class="fas fa-info-circle"
-                                            data-toggle="tooltip"
-                                            data-placement="right"
-                                            title="make sure each point starts with * symbol,  hit enter to add new points"
-                                          />
-                                        </label>
-                                        <div class="col-sm-10">
-                                          <textarea
-                                            class="form-control form-control-sm min-h"
-                                            name="description"
-                                            value={
-                                              this.state.workExperience[index]
-                                                .description
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "workExperience"
-                                              );
-                                            }}
-                                            onKeyUp={event => {
-                                              this.handleKeyPress(event, index);
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
+                      </div>{" "}
                     </div>
-                    <button
-                      type="button"
-                      class="btn btn-link btn-sm"
-                      onClick={this.addCompany}
-                    >
-                      Add Project
-                    </button>
-                  </div>
-                )}
+                  )}
 
-                {this.state.currentStep === steps.organisationAndEducation && (
-                  <div>
+                  {this.state.currentStep === steps.start && (
                     <div class="card">
                       <div class="card-body">
                         <div className="row">
                           <div className="col-md-6">
-                            <h5 class="card-title">Organisations</h5>
                             <div class="card">
                               <div class="card-body">
-                                <div class="form-group row">
-                                  <label
-                                    for="colFormLabelSm"
-                                    class="col-sm-3 col-form-label col-form-label-sm"
+                                <div className="tac">
+                                  <i class="far fa-file-alt fa-5x pb10" />
+                                </div>
+                                <h5 className="tac">Create a new resume</h5>
+                                <p class="card-text tac">
+                                  we will help you create a resume step-by-step
+                                </p>
+                                <div className="tac">
+                                  <button
+                                    type="button"
+                                    class="btn btn-success btn-sm mr10"
+                                    onClick={() => {
+                                      this.setTab(1);
+                                    }}
                                   >
-                                    Name &nbsp;
-                                    <i
-                                      class="fas fa-info-circle"
-                                      data-toggle="tooltip"
-                                      data-placement="right"
-                                      title="Example: TCS (March-2015 to April-2016)"
-                                    />
-                                  </label>
-                                  {this.state.organisations.map(
-                                    (value, index) => {
-                                      return (
-                                        <div class="col-sm-12 pt10">
-                                          <input
-                                            class="form-control form-control-sm"
-                                            name="name"
-                                            value={
-                                              this.state.organisations[index]
-                                                .name
-                                            }
-                                            onChange={event => {
-                                              this.handleArrayInputChange(
-                                                event,
-                                                index,
-                                                "organisations"
-                                              );
-                                            }}
-                                          />
-                                        </div>
-                                      );
-                                    }
-                                  )}
+                                    Create new
+                                  </button>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div className="col-md-6">
-                            <h5 class="card-title">Educations</h5>
-                            <div id="accordion-education">
-                              {this.state.education.map((value, index) => {
-                                return (
-                                  <div class="card pt10" key={index}>
-                                    <div class="card-header p0">
-                                      <h5 class="mb-0">
-                                        <button
-                                          class="btn btn-link"
-                                          data-toggle="collapse"
-                                          data-target={"#education-" + index}
-                                          aria-expanded="true"
-                                          aria-controls={"education-" + index}
-                                        >
-                                          {value.name}
-                                        </button>
-                                      </h5>
-                                    </div>
-                                    <div
-                                      id={"education-" + index}
-                                      class="collapse show"
-                                      aria-labelledby="headingOne"
-                                      data-parent="#accordion-education"
-                                    >
-                                      <div class="card-body">
-                                        <form>
-                                          <div class="form-group row">
-                                            <label
-                                              for="colFormLabelSm"
-                                              class="col-sm-3 col-form-label col-form-label-sm"
-                                            >
-                                              University &nbsp;
-                                              <i
-                                                class="fas fa-info-circle"
-                                                data-toggle="tooltip"
-                                                data-placement="right"
-                                                title="University Visvesvaraya College Of Engineering"
-                                              />
-                                            </label>
-                                            <div class="col-sm-9">
-                                              <input
-                                                class="form-control form-control-sm"
-                                                name="collegeName"
-                                                value={
-                                                  this.state.education[index]
-                                                    .collegeName
-                                                }
-                                                onChange={event => {
-                                                  this.handleArrayInputChange(
-                                                    event,
-                                                    index,
-                                                    "education"
-                                                  );
-                                                }}
-                                              />
-                                            </div>
-                                          </div>
-                                          <div class="form-group row">
-                                            <label
-                                              for="colFormLabelSm"
-                                              class="col-sm-3 col-form-label col-form-label-sm"
-                                            >
-                                              Course &nbsp;
-                                              <i
-                                                class="fas fa-info-circle"
-                                                data-toggle="tooltip"
-                                                data-placement="right"
-                                                title="Example: BE in computer science"
-                                              />
-                                            </label>
-                                            <div class="col-sm-9">
-                                              <input
-                                                class="form-control form-control-sm"
-                                                name="course"
-                                                value={
-                                                  this.state.education[index]
-                                                    .course
-                                                }
-                                                onChange={event => {
-                                                  this.handleArrayInputChange(
-                                                    event,
-                                                    index,
-                                                    "education"
-                                                  );
-                                                }}
-                                              />
-                                            </div>
-                                          </div>
-                                          <div class="form-group row">
-                                            <label
-                                              for="colFormLabelSm"
-                                              class="col-sm-3 col-form-label col-form-label-sm"
-                                            >
-                                              Period &nbsp;
-                                              <i
-                                                class="fas fa-info-circle"
-                                                data-toggle="tooltip"
-                                                data-placement="right"
-                                                title="2011-2015"
-                                              />
-                                            </label>
-                                            <div class="col-sm-9">
-                                              <input
-                                                class="form-control form-control-sm"
-                                                name="timePeriod"
-                                                value={
-                                                  this.state.education[index]
-                                                    .timePeriod
-                                                }
-                                                onChange={event => {
-                                                  this.handleArrayInputChange(
-                                                    event,
-                                                    index,
-                                                    "education"
-                                                  );
-                                                }}
-                                              />
-                                            </div>
-                                          </div>
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                            <div class="card">
+                              <div class="card-body">
+                                <div className="tac">
+                                  <i class="fas fa-cloud-upload-alt fa-5x pb10" />
+                                </div>
+                                <h5 className="tac">
+                                  Upload existing json file
+                                </h5>
+                                <p class="card-text tac">
+                                  we will read the data for you, so you don't
+                                  have to fill the information
+                                </p>
+                                <div className="tac">
+                                  <label class="btn-bs-file btn btn-sm btn-success">
+                                    Upload file
+                                    <input
+                                      type="file"
+                                      onChange={event => {
+                                        this.handleFiles(event);
+                                      }}
+                                    />
+                                  </label>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <button
-                      type="button"
-                      class="btn btn-link btn-sm"
-                      onClick={this.addOrganisation}
-                    >
-                      Add Organisation
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-link btn-sm"
-                      onClick={this.addEducation}
-                    >
-                      Add Education
-                    </button>
-                  </div>
-                )}
+                  )}
 
-                {this.state.currentStep === steps.honorAndAwards && (
-                  <div>
-                    <h5>Honours and Awards</h5>
-                    <div id="accordion-honours_and_awards">
-                      {this.state.honoursAndAwards.map((value, index) => {
-                        return (
-                          <div class="card pt10" key={index}>
-                            <div class="card-header p0">
-                              <h5 class="mb-0">
-                                <button
-                                  class="btn btn-link"
-                                  data-toggle="collapse"
-                                  data-target={
-                                    "#accordion-honours_and_awards-" + index
-                                  }
-                                  aria-expanded="true"
-                                  aria-controls={
-                                    "accordion-honours_and_awards-" + index
-                                  }
-                                >
-                                  {value.name}
-                                </button>
-                              </h5>
+                  {this.state.currentStep === steps.basicInfo && (
+                    <div>
+                      <div class="card">
+                        <div class="card-body">
+                          <form>
+                            <div class="form-group row">
+                              <label
+                                for="colFormLabelSm"
+                                class="col-sm-3 col-form-label col-form-label-sm"
+                              >
+                                Name
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="name"
+                                  value={this.state.name}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
                             </div>
-                            <div
-                              id={"accordion-honours_and_awards-" + index}
-                              class="collapse show"
-                              aria-labelledby="headingOne"
-                              data-parent="#accordion-honours_and_awards"
-                            >
-                              <div class="card-body">
-                                <form>
-                                  <div class="form-group row">
-                                    <label
-                                      for="colFormLabelSm"
-                                      class="col-sm-3 col-form-label col-form-label-sm"
-                                    >
-                                      Competition &nbsp;
-                                      <i
-                                        class="fas fa-info-circle"
-                                        data-toggle="tooltip"
-                                        data-placement="right"
-                                        title="Example: Hacker rank june coding competation"
-                                      />
-                                    </label>
-                                    <div class="col-sm-9">
-                                      <input
-                                        class="form-control form-control-sm"
-                                        name="challengeName"
-                                        value={
-                                          this.state.honoursAndAwards[index]
-                                            .challengeName
-                                        }
-                                        onChange={event => {
-                                          this.handleArrayInputChange(
-                                            event,
-                                            index,
-                                            "honoursAndAwards"
-                                          );
-                                        }}
-                                      />
+                            <div class="form-group row">
+                              <label
+                                for="colFormLabelSm"
+                                class="col-sm-3 col-form-label col-form-label-sm"
+                              >
+                                Job Title
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="title"
+                                  value={this.state.title}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label
+                                for="colFormLabelSm"
+                                class="col-sm-3 col-form-label col-form-label-sm"
+                              >
+                                Description
+                              </label>{" "}
+                              <div class="col-sm-9">
+                                <textarea
+                                  class="form-control form-control-sm"
+                                  name="description"
+                                  value={this.state.description}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Email
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="email"
+                                  value={this.state.email}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Phone Number
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="phoneNumber"
+                                  value={this.state.phoneNumber}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Profile pic
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  type="file"
+                                  class="form-control-file form-control-sm"
+                                  name="profilePicture"
+                                  // value={this.state.profilePicture}
+                                  onChange={event => {
+                                    this.readURL(event);
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                LinkedIn url
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="linkedIn"
+                                  value={this.state.linkedIn}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Skype Id
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="skypeId"
+                                  value={this.state.skypeId}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Location
+                              </label>
+                              <div class="col-sm-9">
+                                <input
+                                  class="form-control form-control-sm"
+                                  name="location"
+                                  value={this.state.location}
+                                  onChange={this.handleInputChange}
+                                />
+                              </div>
+                            </div>
+
+                            <div class="form-group row">
+                              <label class="col-sm-3 col-form-label col-form-label-sm">
+                                Languages &nbsp;
+                                <i
+                                  class="fas fa-info-circle"
+                                  data-toggle="tooltip"
+                                  data-placement="right"
+                                  title="If language is not available, please type in the language and hit enter"
+                                />
+                              </label>
+                              <div class="col-sm-9">
+                                <select
+                                  class="form-control form-control-sm"
+                                  ref="s2_lang"
+                                  multiple={true}
+                                  class="form-control"
+                                  value={this.state.languages}
+                                  onChange={this.handleInputChange}
+                                >
+                                  <option value="English">English</option>
+                                  <option value="Hindi">Hindi</option>
+                                  <option value="Kannada">Kannada</option>
+                                  <option value="Tamil">Tamil</option>
+                                  <option value="Telugu">Telugu</option>
+                                  <option value="Malayalam">Malayalam</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                              <label className="col-sm-3 col-form-label col-form-label-sm">
+                                Skills &nbsp;
+                                <i
+                                  class="fas fa-info-circle"
+                                  data-toggle="tooltip"
+                                  data-placement="right"
+                                  title="If Skill is not available in the list, please type in the skill and hit enter"
+                                />
+                              </label>
+                              <div class="col-sm-9">
+                                <select
+                                  class="form-control form-control-sm"
+                                  ref="s2_skills"
+                                  multiple={true}
+                                  class="form-control"
+                                  value={this.state.skills}
+                                  onChange={this.handleInputChange}
+                                >
+                                  <option value="Dotnet">Dotnet</option>
+                                  <option value="c#">c#</option>
+                                  <option value="Java">Java</option>
+                                  <option value="Entity Framework">
+                                    Entity Framework
+                                  </option>
+                                  <option value="Angular">Angular</option>
+                                  <option value="React">React</option>
+                                </select>
+                              </div>{" "}
+                            </div>
+                          </form>
+                        </div>
+                      </div>{" "}
+                    </div>
+                  )}
+
+                  {this.state.currentStep === steps.projects && (
+                    <div>
+                      <div id="accordion-company">
+                        {this.state.workExperience.map((value, index) => {
+                          return (
+                            <div class="card" key={index}>
+                              <div class="card-header p0">
+                                <h5 class="mb-0">
+                                  <button
+                                    class="btn btn-link"
+                                    data-toggle="collapse"
+                                    data-target={"#company-" + index}
+                                    aria-expanded="true"
+                                    aria-controls={"company-" + index}
+                                  >
+                                    {value.name}
+                                  </button>
+                                </h5>
+                              </div>
+
+                              <div
+                                id={"company-" + index}
+                                class="collapse show"
+                                aria-labelledby="headingOne"
+                                data-parent="#accordion-company"
+                              >
+                                <div class="card-body">
+                                  <form>
+                                    <div className="row">
+                                      <div className="col-md-12">
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Project
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              class="form-control form-control-sm"
+                                              name="name"
+                                              value={
+                                                this.state.workExperience[index]
+                                                  .name
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "workExperience"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Role
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              type="email"
+                                              class="form-control form-control-sm"
+                                              name="position"
+                                              value={
+                                                this.state.workExperience[index]
+                                                  .position
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "workExperience"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Location
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              type="email"
+                                              class="form-control form-control-sm"
+                                              name="location"
+                                              value={
+                                                this.state.workExperience[index]
+                                                  .location
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "workExperience"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Date
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              type="email"
+                                              class="form-control form-control-sm"
+                                              name="date"
+                                              value={
+                                                this.state.workExperience[index]
+                                                  .date
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "workExperience"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Description &nbsp;
+                                            <i
+                                              class="fas fa-info-circle"
+                                              data-toggle="tooltip"
+                                              data-placement="right"
+                                              title="make sure each point starts with * symbol,  hit enter to add new points"
+                                            />
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <textarea
+                                              class="form-control form-control-sm min-h"
+                                              name="description"
+                                              value={
+                                                this.state.workExperience[index]
+                                                  .description
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "workExperience"
+                                                );
+                                              }}
+                                              onKeyUp={event => {
+                                                this.handleKeyPress(
+                                                  event,
+                                                  index
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div class="form-group row">
-                                    <label
-                                      for="colFormLabelSm"
-                                      class="col-sm-3 col-form-label col-form-label-sm"
-                                    >
-                                      Winning Title &nbsp;
-                                      <i
-                                        class="fas fa-info-circle"
-                                        data-toggle="tooltip"
-                                        data-placement="right"
-                                        title="Example: Coder of the month"
-                                      />
-                                    </label>
-                                    <div class="col-sm-9">
-                                      <input
-                                        class="form-control form-control-sm"
-                                        name="title"
-                                        value={
-                                          this.state.honoursAndAwards[index]
-                                            .title
-                                        }
-                                        onChange={event => {
-                                          this.handleArrayInputChange(
-                                            event,
-                                            index,
-                                            "honoursAndAwards"
-                                          );
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                </form>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm"
+                        onClick={this.addCompany}
+                      >
+                        Add Project
+                      </button>
+                    </div>
+                  )}
+
+                  {this.state.currentStep === steps.organisation && (
+                    <div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div class="card">
+                            <div class="card-body">
+                              <div class="form-group row">
+                                <label
+                                  for="colFormLabelSm"
+                                  class="col-sm-3 col-form-label col-form-label-sm"
+                                >
+                                  Name &nbsp;
+                                  <i
+                                    class="fas fa-info-circle"
+                                    data-toggle="tooltip"
+                                    data-placement="right"
+                                    title="Example: TCS (March-2015 to April-2016)"
+                                  />
+                                </label>
+                                {this.state.organisations.map(
+                                  (value, index) => {
+                                    return (
+                                      <div class="col-sm-12 pt10">
+                                        <input
+                                          class="form-control form-control-sm"
+                                          name="name"
+                                          value={
+                                            this.state.organisations[index].name
+                                          }
+                                          onChange={event => {
+                                            this.handleArrayInputChange(
+                                              event,
+                                              index,
+                                              "organisations"
+                                            );
+                                          }}
+                                        />
+                                      </div>
+                                    );
+                                  }
+                                )}
                               </div>
                             </div>
                           </div>
-                        );
-                      })}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm"
+                        onClick={this.addOrganisation}
+                      >
+                        Add Organisation
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      class="btn btn-link btn-sm"
-                      onClick={this.addHonoursAndAward}
-                    >
-                      Add Honours and Awards
-                    </button>
-                  </div>
-                )}
+                  )}
 
-                <div className="row pt10">
-                  <div className="col-md-12">
-                    {this.state.currentStep !== steps.template &&
-                      this.state.currentStep !== steps.basicInfo && (
-                        <button
-                          type="button"
-                          class="btn btn-success btn-sm float-right"
-                          onClick={() => {
-                            this.setState({ isPreviewMode: true });
-                            this.setState({ mainBackGround: "white-bg" });
-                          }}
-                        >
-                          Resume Preview
-                        </button>
+                  {this.state.currentStep === steps.education && (
+                    <div>
+                      <div className="row">
+                        <div className="col-md-12">
+                          <div id="accordion-education">
+                            {this.state.education.map((value, index) => {
+                              return (
+                                <div class="card" key={index}>
+                                  <div class="card-header p0">
+                                    <h5 class="mb-0">
+                                      <button
+                                        class="btn btn-link"
+                                        data-toggle="collapse"
+                                        data-target={"#education-" + index}
+                                        aria-expanded="true"
+                                        aria-controls={"education-" + index}
+                                      >
+                                        {value.name}
+                                      </button>
+                                    </h5>
+                                  </div>
+                                  <div
+                                    id={"education-" + index}
+                                    class="collapse show"
+                                    aria-labelledby="headingOne"
+                                    data-parent="#accordion-education"
+                                  >
+                                    <div class="card-body">
+                                      <form>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            University &nbsp;
+                                            <i
+                                              class="fas fa-info-circle"
+                                              data-toggle="tooltip"
+                                              data-placement="right"
+                                              title="University Visvesvaraya College Of Engineering"
+                                            />
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              class="form-control form-control-sm"
+                                              name="collegeName"
+                                              value={
+                                                this.state.education[index]
+                                                  .collegeName
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "education"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Course &nbsp;
+                                            <i
+                                              class="fas fa-info-circle"
+                                              data-toggle="tooltip"
+                                              data-placement="right"
+                                              title="Example: BE in computer science"
+                                            />
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              class="form-control form-control-sm"
+                                              name="course"
+                                              value={
+                                                this.state.education[index]
+                                                  .course
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "education"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                          <label
+                                            for="colFormLabelSm"
+                                            class="col-sm-3 col-form-label col-form-label-sm"
+                                          >
+                                            Period &nbsp;
+                                            <i
+                                              class="fas fa-info-circle"
+                                              data-toggle="tooltip"
+                                              data-placement="right"
+                                              title="2011-2015"
+                                            />
+                                          </label>
+                                          <div class="col-sm-9">
+                                            <input
+                                              class="form-control form-control-sm"
+                                              name="timePeriod"
+                                              value={
+                                                this.state.education[index]
+                                                  .timePeriod
+                                              }
+                                              onChange={event => {
+                                                this.handleArrayInputChange(
+                                                  event,
+                                                  index,
+                                                  "education"
+                                                );
+                                              }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm"
+                        onClick={this.addEducation}
+                      >
+                        Add Education
+                      </button>
+                    </div>
+                  )}
+                  {this.state.currentStep === steps.honorAndAwards && (
+                    <div>
+                      <div id="accordion-honours_and_awards">
+                        {this.state.honoursAndAwards.map((value, index) => {
+                          return (
+                            <div class="card" key={index}>
+                              <div class="card-header p0">
+                                <h5 class="mb-0">
+                                  <button
+                                    class="btn btn-link"
+                                    data-toggle="collapse"
+                                    data-target={
+                                      "#accordion-honours_and_awards-" + index
+                                    }
+                                    aria-expanded="true"
+                                    aria-controls={
+                                      "accordion-honours_and_awards-" + index
+                                    }
+                                  >
+                                    {value.name}
+                                  </button>
+                                </h5>
+                              </div>
+                              <div
+                                id={"accordion-honours_and_awards-" + index}
+                                class="collapse show"
+                                aria-labelledby="headingOne"
+                                data-parent="#accordion-honours_and_awards"
+                              >
+                                <div class="card-body">
+                                  <form>
+                                    <div class="form-group row">
+                                      <label
+                                        for="colFormLabelSm"
+                                        class="col-sm-3 col-form-label col-form-label-sm"
+                                      >
+                                        Competition &nbsp;
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="right"
+                                          title="Example: Hacker rank june coding competation"
+                                        />
+                                      </label>
+                                      <div class="col-sm-9">
+                                        <input
+                                          class="form-control form-control-sm"
+                                          name="challengeName"
+                                          value={
+                                            this.state.honoursAndAwards[index]
+                                              .challengeName
+                                          }
+                                          onChange={event => {
+                                            this.handleArrayInputChange(
+                                              event,
+                                              index,
+                                              "honoursAndAwards"
+                                            );
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                      <label
+                                        for="colFormLabelSm"
+                                        class="col-sm-3 col-form-label col-form-label-sm"
+                                      >
+                                        Winning Title &nbsp;
+                                        <i
+                                          class="fas fa-info-circle"
+                                          data-toggle="tooltip"
+                                          data-placement="right"
+                                          title="Example: Coder of the month"
+                                        />
+                                      </label>
+                                      <div class="col-sm-9">
+                                        <input
+                                          class="form-control form-control-sm"
+                                          name="title"
+                                          value={
+                                            this.state.honoursAndAwards[index]
+                                              .title
+                                          }
+                                          onChange={event => {
+                                            this.handleArrayInputChange(
+                                              event,
+                                              index,
+                                              "honoursAndAwards"
+                                            );
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <button
+                        type="button"
+                        class="btn btn-link btn-sm"
+                        onClick={this.addHonoursAndAward}
+                      >
+                        Add Honours and Awards
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="row pt10">
+                    <div className="col-md-12">
+                      {/* <input
+                        type="file"
+                        class="form-control-file form-control-sm"
+                        onChange={event => {
+                          this.handleFiles(event);
+                        }}
+                      /> */}
+
+                      {this.state.currentStep !== steps.start && (
+                        <div>
+                          {this.state.currentStep !== steps.template &&
+                            this.state.currentStep !== steps.basicInfo && (
+                              <div>
+                                <button
+                                  type="button"
+                                  class="btn btn-success btn-sm float-right"
+                                  onClick={() => {
+                                    this.setState({ isPreviewMode: true });
+                                    this.setState({
+                                      mainBackGround: "white-bg"
+                                    });
+                                  }}
+                                >
+                                  Resume Preview
+                                </button>
+                                <button
+                                  type="button"
+                                  class="btn btn-success btn-sm float-right mr10"
+                                  onClick={() => {
+                                    this.downloadFile();
+                                  }}
+                                >
+                                  Download file &nbsp;
+                                  <i
+                                    class="fas fa-info-circle cw"
+                                    data-toggle="tooltip"
+                                    data-placement="right"
+                                    title="Download the json file and upload the file next time so that it prefills the form data automatically."
+                                  />
+                                </button>
+                              </div>
+                            )}
+                          {this.state.currentStep !== steps.template && (
+                            <button
+                              type="button"
+                              class="btn btn-success btn-sm mr10"
+                              onClick={() => {
+                                this.setTab(this.state.currentStep - 1);
+                              }}
+                            >
+                              Previous
+                            </button>
+                          )}
+                          {this.state.currentStep !== steps.honorAndAwards && (
+                            <button
+                              type="button"
+                              class="btn btn-success btn-sm mr10"
+                              onClick={() => {
+                                this.setTab(this.state.currentStep + 1);
+                              }}
+                            >
+                              Next
+                            </button>
+                          )}
+                        </div>
                       )}
-                    {this.state.currentStep !== steps.template && (
-                      <button
-                        type="button"
-                        class="btn btn-success btn-sm mr10"
-                        onClick={() => {
-                          this.setTab(this.state.currentStep - 1);
-                        }}
-                      >
-                        Previous
-                      </button>
-                    )}
-                    {this.state.currentStep !== steps.honorAndAwards && (
-                      <button
-                        type="button"
-                        class="btn btn-success btn-sm mr10"
-                        onClick={() => {
-                          this.setTab(this.state.currentStep + 1);
-                        }}
-                      >
-                        Next
-                      </button>
-                    )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-md-3">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title def-text-color">
+                        Wanna Buy Me A Coffee?
+                      </h5>
+                      <p class="card-text italic">
+                        If you like the free resume builder web app and would
+                        like to donate, then you can pay via PayTm | Google pay|
+                        PhonePe to 8792092047. <br />
+                        Paypal link paypal.me/RamBharlia
+                        <br /> <br />
+                        Please feel free to write for any suggestion at
+                        rambharlia007@gmail.com
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

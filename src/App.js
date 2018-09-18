@@ -291,7 +291,7 @@ class App extends Component {
       });
   };
   componentDidMount() {
-    //this.updateVisitCount();
+    this.updateVisitCount();
     this.setThirdParty();
   }
   componentDidUpdate() {

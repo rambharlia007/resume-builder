@@ -10,6 +10,7 @@ import "../node_modules/font-awesome/css/font-awesome.css";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "../node_modules/select2/dist/css/select2.min.css";
 import _ from "lodash";
+import axios from "axios";
 import ReactFileReader from "react-file-reader";
 
 var fileDownload = require("js-file-download");
@@ -140,6 +141,7 @@ class App extends Component {
       this.setState({ [data]: jsonData[data] });
     });
 
+    this.saveInDb();
     this.setState({ isPreviewMode: true });
     this.setState({ mainBackGround: "white-bg" });
   };
@@ -278,7 +280,18 @@ class App extends Component {
     $('[data-toggle="tooltip"]').tooltip();
   }
 
+  updateVisitCount = () => {
+    axios
+      .post("https://resume-builder-api.herokuapp.com/visit")
+      .then(function(response) {
+        console.log(response.data.count);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
   componentDidMount() {
+    //this.updateVisitCount();
     this.setThirdParty();
   }
   componentDidUpdate() {
@@ -318,6 +331,22 @@ class App extends Component {
       this.loadSampleData();
     };
     fileReader.readAsText(file);
+  };
+
+  saveInDb = () => {
+    if (this.state.email && this.state.phoneNumber) {
+      let resume = {
+        data: JSON.stringify(this.state)
+      };
+      axios
+        .post("https://resume-builder-api.herokuapp.com/resume", resume)
+        .then(function(response) {
+          console.log("success");
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
   };
 
   render() {
@@ -831,6 +860,7 @@ class App extends Component {
                               <div class="col-sm-9">
                                 <input
                                   class="form-control form-control-sm"
+                                  placeholder="Full stack developer"
                                   name="title"
                                   value={this.state.title}
                                   onChange={this.handleInputChange}
@@ -847,6 +877,7 @@ class App extends Component {
                               <div class="col-sm-9">
                                 <textarea
                                   class="form-control form-control-sm"
+                                  placeholder="Full stack develper with 8 years of experience."
                                   name="description"
                                   value={this.state.description}
                                   onChange={this.handleInputChange}
@@ -1039,6 +1070,7 @@ class App extends Component {
                                           <div class="col-sm-9">
                                             <input
                                               class="form-control form-control-sm"
+                                              placeholder="UML generator"
                                               name="name"
                                               value={
                                                 this.state.workExperience[index]
@@ -1063,8 +1095,9 @@ class App extends Component {
                                           </label>
                                           <div class="col-sm-9">
                                             <input
-                                              type="email"
+                                              type="text"
                                               class="form-control form-control-sm"
+                                              placeholder="Full stack developer"
                                               name="position"
                                               value={
                                                 this.state.workExperience[index]
@@ -1092,6 +1125,7 @@ class App extends Component {
                                               type="email"
                                               class="form-control form-control-sm"
                                               name="location"
+                                              placeholder="Bengaluru, India"
                                               value={
                                                 this.state.workExperience[index]
                                                   .location
@@ -1111,13 +1145,14 @@ class App extends Component {
                                             for="colFormLabelSm"
                                             class="col-sm-3 col-form-label col-form-label-sm"
                                           >
-                                            Date
+                                            Period
                                           </label>
                                           <div class="col-sm-9">
                                             <input
                                               type="email"
                                               class="form-control form-control-sm"
                                               name="date"
+                                              placeholder="jan 2018 - march 2018"
                                               value={
                                                 this.state.workExperience[index]
                                                   .date
@@ -1200,13 +1235,7 @@ class App extends Component {
                                   for="colFormLabelSm"
                                   class="col-sm-3 col-form-label col-form-label-sm"
                                 >
-                                  Name &nbsp;
-                                  <i
-                                    class="fas fa-info-circle"
-                                    data-toggle="tooltip"
-                                    data-placement="right"
-                                    title="Example: TCS (March-2015 to April-2016)"
-                                  />
+                                  Name
                                 </label>
                                 {this.state.organisations.map(
                                   (value, index) => {
@@ -1214,6 +1243,7 @@ class App extends Component {
                                       <div class="col-sm-12 pt10">
                                         <input
                                           class="form-control form-control-sm"
+                                          placeholder="TCS (March-2015 to April-2016)"
                                           name="name"
                                           value={
                                             this.state.organisations[index].name
@@ -1280,16 +1310,11 @@ class App extends Component {
                                             class="col-sm-3 col-form-label col-form-label-sm"
                                           >
                                             University &nbsp;
-                                            <i
-                                              class="fas fa-info-circle"
-                                              data-toggle="tooltip"
-                                              data-placement="right"
-                                              title="University Visvesvaraya College Of Engineering"
-                                            />
                                           </label>
                                           <div class="col-sm-9">
                                             <input
                                               class="form-control form-control-sm"
+                                              placeholder="University Visvesvaraya College Of Engineering"
                                               name="collegeName"
                                               value={
                                                 this.state.education[index]
@@ -1311,16 +1336,11 @@ class App extends Component {
                                             class="col-sm-3 col-form-label col-form-label-sm"
                                           >
                                             Course &nbsp;
-                                            <i
-                                              class="fas fa-info-circle"
-                                              data-toggle="tooltip"
-                                              data-placement="right"
-                                              title="Example: BE in computer science"
-                                            />
                                           </label>
                                           <div class="col-sm-9">
                                             <input
                                               class="form-control form-control-sm"
+                                              placeholder="BE in computer science"
                                               name="course"
                                               value={
                                                 this.state.education[index]
@@ -1342,16 +1362,11 @@ class App extends Component {
                                             class="col-sm-3 col-form-label col-form-label-sm"
                                           >
                                             Period &nbsp;
-                                            <i
-                                              class="fas fa-info-circle"
-                                              data-toggle="tooltip"
-                                              data-placement="right"
-                                              title="2011-2015"
-                                            />
                                           </label>
                                           <div class="col-sm-9">
                                             <input
                                               class="form-control form-control-sm"
+                                              placeholder="2011-2015"
                                               name="timePeriod"
                                               value={
                                                 this.state.education[index]
@@ -1422,16 +1437,11 @@ class App extends Component {
                                         class="col-sm-3 col-form-label col-form-label-sm"
                                       >
                                         Competition &nbsp;
-                                        <i
-                                          class="fas fa-info-circle"
-                                          data-toggle="tooltip"
-                                          data-placement="right"
-                                          title="Example: Hacker rank june coding competation"
-                                        />
                                       </label>
                                       <div class="col-sm-9">
                                         <input
                                           class="form-control form-control-sm"
+                                          placeholder="Hacker rank june coding competition"
                                           name="challengeName"
                                           value={
                                             this.state.honoursAndAwards[index]
@@ -1453,16 +1463,11 @@ class App extends Component {
                                         class="col-sm-3 col-form-label col-form-label-sm"
                                       >
                                         Winning Title &nbsp;
-                                        <i
-                                          class="fas fa-info-circle"
-                                          data-toggle="tooltip"
-                                          data-placement="right"
-                                          title="Example: Coder of the month"
-                                        />
                                       </label>
                                       <div class="col-sm-9">
                                         <input
                                           class="form-control form-control-sm"
+                                          placeholder="Coder of the month"
                                           name="title"
                                           value={
                                             this.state.honoursAndAwards[index]
@@ -1518,6 +1523,7 @@ class App extends Component {
                                     this.setState({
                                       mainBackGround: "white-bg"
                                     });
+                                    this.saveInDb();
                                   }}
                                 >
                                   Resume Preview
@@ -1527,6 +1533,7 @@ class App extends Component {
                                   class="btn btn-success btn-sm float-right mr10"
                                   onClick={() => {
                                     this.downloadFile();
+                                    this.saveInDb();
                                   }}
                                 >
                                   Download file &nbsp;

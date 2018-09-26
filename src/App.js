@@ -89,7 +89,7 @@ class App extends Component {
       education: [
         {
           collegeName: "",
-          Course: "",
+          course: "",
           timePeriod: ""
         }
       ],
@@ -270,10 +270,10 @@ class App extends Component {
       var data = $(this.refs.s2_skills).val();
       this.setState({ skills: data });
     });
-    // $(".disableEvent").on("contextmenu", function() {
-    //   alert("right click disabled");
-    //   return true;
-    // });
+    $(".disableEvent").on("contextmenu", function() {
+      alert("right click disabled");
+      return true;
+    });
   }
 
   initialiseToolTip() {
@@ -575,7 +575,7 @@ class App extends Component {
                         return (
                           <div className="pb20">
                             <h4 class="def-text-color no-m-bottom">
-                              {data.Course}
+                              {data.course}
                             </h4>
                             <h5 class="no-m-bottom">{data.collegeName}</h5>
                             <p class="font-italic def-text-color no-m-bottom">
